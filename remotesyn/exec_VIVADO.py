@@ -296,7 +296,7 @@ class exec_VIVADO:
                 f.write(f'import_files -norecurse {self.curdir}/{s}\n')
             src = self.config.get(target, 'src_ip', fallback='').split()
             for s in src:
-                f.write(f'add_files -norecurse {self.curdir}/{self.outdir}/{s}/{s}.xci\n')
+                f.write(f'add_files -norecurse {self.curdir}/{self.outdir}/{target}/{s}/{s}.xci\n')
             src = self.config.get(target, 'src_c', fallback='').split()
             for s in src:
                 if s.endswith('.h'):
