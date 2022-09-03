@@ -1,0 +1,233 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import configparser
+import paramiko
+import socket
+
+from remotesyn import Connection, exec_ISE, exec_VIVADO, exec_REMOTE
+
+def server(accidentals, positionals):
+    addr = accidentals['server'].split(':')
+    if len(addr)!=2:
+        print("Host address must be in form hostname:port")
+        exit(1)
+    host_key = paramiko.RSAKey(filename=accidentals['privkey'])
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    sock.bind((addr[0], int(addr[1])))
+    sock.listen(100)
+
+    # Get authorized hosts
+    with open(accidentals['authorized'], 'r') as f:
+        authorized = f.read().split('\n')
+
+    running = True
+    threads = []
+    try:
+        while running:
+            client, addr = sock.accept()
+            conn = Connection(client, addr, host_key, authorized)
+            conn.start()
+            threads.append(conn)
+    except KeyboardInterrupt:
+        print("Stopping server")
+        running = False
+        for t in threads:
+            t.stop()
+    finally:
+        sock.close()
+
+def main(accidentals, positionals):
+    if 'server' in accidentals:
+        return server(accidentals, positionals)
+    elif 'local' in accidentals:
+        config = accidentals['config']
+        if config.get('project', 'toolchain') == 'ISE':
+            execInterface = exec_ISE(config, accidentals['builddir'])
+        else:
+            execInterface = exec_VIVADO(config, accidentals['builddir'])
+    else:
+        config = accidentals['config']
+        execInterface = exec_REMOTE(config, accidentals['configname'])
+
+    i = 0
+    while i< len(positionals):
+        action = positionals[i]
+        i += 1
+
+        if action == 'ip':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_ip_gen(target)
+
+        elif action == 'syn':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_synthesize(target)
+
+        elif action == 'impl':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_implement(target)
+
+        elif action == 'bit':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_bit(target)
+
+        elif action == 'all':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_synthesize(target)
+            execInterface.do_implement(target)
+            execInterface.do_bit(target)
+
+        elif action == 'floorplan':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_floorplan(target)
+
+        elif action == 'sim':
+            if i>=len(positionals):
+                print("Unexpected end of input")
+                exit(1)
+            target = positionals[i]
+            i += 1
+            execInterface.do_sim(target)
+
+        else:
+            print("Unknown action...")
+            exit(1)
+
+def print_help():
+    print("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
+    print(f"Usage: {sys.argv[0]} [ OPTIONS ] action [ target ] ...")
+    print("where OPTIONS := { -h | -l | -s host:port privkey pubkey authorized | -c config | -b build_dir }")
+    print("      action  := { ip | syn | impl | bit | all | floorplan | sim | init }")
+    print("")
+    print("Options:")
+    print("  -h                 Show this help message")
+    print("  -l                 Local build")
+    print("  -s <s-info>        Start server with server information s-info. host:port is the address to bind")
+    print("                     to, privkey and pubkey are the ssh keys of the server and authorized is the")
+    print("                     authorized_keys file for the SSH server")
+    print("  -c <file>          Configuration file, defaults to project.cfg")
+    print("  -b <dir>           Build directory, defaults to .build")
+    print("")
+    print("Actions:")
+    print("ip <target>          Generate IP files from vendor provided libraries")
+    print("syn <target>         Synthesize design for target")
+    print("impl <target>        Route and place design for target")
+    print("bit <target>         Generate output files and run analysis for target")
+    print("all <target>         Generate IP, synthesize, route and place design for target")
+    print("floorplan <target>   Run floorplan editor, currently only for local execution")
+    print("sim <simtarget>      Run simulation target")
+    print("init                 Initialize project")
+
+if __name__=="__main__":
+    accidentals = {}
+    positionals = []
+
+    if len(sys.argv)==1:
+        print_help()
+        exit(1)
+
+    i = 1
+    while i<len(sys.argv):
+        if sys.argv[i].startswith('-'):
+            if sys.argv[i] == '-h':
+                print_help()
+                exit(0)
+            elif sys.argv[i] == '-l':
+                accidentals['local'] = True
+            elif sys.argv[i] == '-s':
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['server'] = sys.argv[i+1]
+                i += 1
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['privkey'] = sys.argv[i+1]
+                i += 1
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['pubkey'] = sys.argv[i+1]
+                i += 1
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['authorized'] = sys.argv[i+1]
+                i += 1
+            elif sys.argv[i] == '-c':
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['config'] = sys.argv[i+1]
+                i += 1
+            elif sys.argv[i] == '-b':
+                if i+1>=len(sys.argv):
+                    print("Unexpected end of input")
+                    exit(1)
+                accidentals['builddir'] = sys.argv[i+1]
+                i += 1
+
+        else:
+            if sys.argv[i] == 'init':
+                print("+ Generate example configuration file")
+                with open('example.cfg', 'w') as f:
+                    f.write("# PROJECT SETTINGS\n")
+                    f.write("# ----------------\n")
+                    f.write("[server]\nhostname = localhost\nport = 8080\nprivkey = keys/id_rsa\npubkey = keys/id_rsa.pub\n\n")
+                    f.write("[project]\n# Toolchain selection. choose between [ISE, VIVADO]\ntoolchain = ISE\nout_dir = OUT\n\n")
+                    f.write("[target]\nfamily = spartan6\ndevice = xc6lsx9\npackage = tgq144\nspeedgrade = -2\n\n")
+                    f.write("# HARDWARE TARGETS\n")
+                    f.write("# ----------------\n")
+                    f.write("src_vhdl = RTL/toplevel.vhd\nsrc_verilog = \nsrc_sysverilog = \n")
+                    f.write("src_constraints = CON/toplevel.ucf\nsrc_ip = \ntoplevel = toplevel\nextra_options = ")
+                exit(1)
+
+            positionals.append(sys.argv[i])
+        i += 1
+
+    if 'config' not in accidentals and 'server' not in accidentals:
+        # Running in client mode and no config file specified -> pick default
+        accidentals['config'] = 'project.cfg'
+
+    if 'config' in accidentals and 'server' not in accidentals:
+        if os.path.exists(accidentals['config']):
+            accidentals['configname'] = accidentals['config']
+            config = configparser.ConfigParser()
+            config.read(accidentals['config'])
+            accidentals['config'] = config
+        else:
+            print(f"Config file \'{accidentals['config']}\' not found")
+            exit(1)
+
+    if ('server' in accidentals or 'local' in accidentals) and 'builddir' not in accidentals:
+        accidentals['builddir'] = '.build'
+
+    main(accidentals, positionals)
+    exit(0)
