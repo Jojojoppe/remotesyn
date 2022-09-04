@@ -1,0 +1,13 @@
+Metadata-Version: 2.1
+Name: remotesyn
+Version: 0.2
+Summary: Remote FPGA synthesis abstraction tool
+Home-page: https://git.joppeb.nl/joppe/remotesyn
+Download-URL: 
+Author: Joppe Blondel
+Author-email: joppe@blondel.nl
+License: BSD Licence
+Keywords: FPGA,Synthesis,Xilinx,ISE,Vivado
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 3

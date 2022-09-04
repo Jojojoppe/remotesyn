@@ -1,0 +1,186 @@
+#!/usr/bin/env python3
+
+import configparser
+import sys
+import paramiko
+import base64
+import struct
+import os
+import json
+
+def cmd(cmd, channel):
+    channel.exec_command(base64.encodebytes(cmd))
+
+def sstr(s):
+    return struct.pack('>I', len(s)) + s.encode('utf-8')
+    
+def rstr(channel):
+    l = struct.unpack('>I', channel.recv(4))[0]
+    return bytes.decode(channel.recv(l), 'utf-8')
+
+def send_file(channel, file, othername=None):
+    print(f"> {file}")
+    if not os.path.exists(file):
+        print(f"Error: {file} does not exists")
+    with open(file, 'rb') as f:
+        stat = os.fstat(f.fileno())
+        print('  -> fsize', stat.st_size)
+        if othername is None:
+            othername = file
+        fsize = struct.pack('>q', stat.st_size)
+        cmd(b'sf'+sstr(othername)+fsize, channel)
+        status = channel.recv(3)
+        if status!=b'OK\n':
+            print('Something went wrong...')
+            exit(1)
+        i = stat.st_size
+        while i>0:
+            fdata = f.read(1024)
+            i -= 1024
+            channel.sendall(fdata)
+
+def recv_file(channel, file):
+    print(f"< {file}")
+    if os.path.dirname(file) != '':
+        os.makedirs(os.path.dirname(file), exist_ok=True)
+    with open(file, 'wb') as f:
+        cmd(b'rf'+sstr(file), channel)
+        while True:
+            status = channel.recv(2)
+            if status != b'\x00\x00':
+                break
+        if status!=b'OK':
+            msg = channel.recv(1024)
+            print("Error:", bytes.decode(msg, 'ascii'))
+            exit(1)
+        fsize = channel.recv(8)
+        fsize = struct.unpack('>q', fsize)[0]
+        print('  -> fsize', fsize)
+        while fsize>0:
+            f.write(channel.recv(1024))
+            fsize -= 1024
+
+def print_help():
+    print("Unified FPGA synthesizer frontend - remote execution\r\n(c) Joppe Blondel - 2022\r\n")
+    print(f"Usage: {sys.argv[0]} [ OPTIONS ] action [ target ] ...")
+    print("")
+    print("Options:")
+    print("  -h                 Show this help message")
+    print("  -c <file>          Configuration file, defaults to project.cfg")
+    print("")
+    print("Actions:")
+    print("ip <target>          Generate IP files from vendor provided libraries")
+    print("syn <target>         Synthesize design for target")
+    print("impl <target>        Route and place design for target")
+    print("bit <target>         Generate output files and run analysis for target")
+    print("all <target>         Generate IP, synthesize, route and place design for target")
+    print("floorplan <target>   Run floorplan editor, currently only for local execution")
+    print("sim <simtarget>      Run simulation target")
+
+if __name__=="__main__":
+    # Parse arguments
+    i = 1
+    nextarg = None
+    configpath = 'project.cfg'
+    actions = []
+    while i<len(sys.argv):
+        if nextarg is not None:
+            if nextarg=='config':
+                configpath = sys.argv[i]
+                nextarg = None
+            else:
+                actions.append((nextarg, sys.argv[i]))
+                nextarg = None
+        elif sys.argv[i]=='-h':
+            print_help()
+            exit(0)
+        elif sys.argv[i]=='-c':
+            nextarg = 'config'
+        else:
+            nextarg = sys.argv[i]
+        i += 1
+    if nextarg is not None:
+        print("ERROR: expected more arguments")
+        exit(1)
+
+    config = configparser.ConfigParser()
+    config.read(configpath)
+
+    # Get SSH configuration
+    privkey = config.get('server', 'privkey', fallback='__privkey__')
+    pubkey = config.get('server', 'pubkey', fallback='__pubkey__')
+    hostname = config.get('server', 'hostname', fallback='__hostname__')
+    port = config.get('server', 'port', fallback='__port__')
+    if privkey=='__privkey__' or pubkey=='__pubkey__' or hostname=='__hostname__' or port=='__port__':
+        print("ERROR: Not enough server information in the config file")
+        exit(1)
+
+    # Connect to SSH and create channel
+    try:
+        host_key = paramiko.RSAKey(filename=privkey)
+        client = paramiko.SSHClient()
+        client.load_system_host_keys()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        trans = paramiko.Transport((hostname, int(port)))
+        trans.connect(None, pkey=host_key)
+        channel = trans.open_channel('session')
+    except paramiko.ssh_exception.SSHException as e:
+        print("ERROR: Could not connect to server")
+        exit(1)
+
+    # Send project identification
+    cmd(b'id' + struct.pack('>q', hash(host_key.get_base64())), channel)
+    # Send config
+    cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
+
+    subprocesses = []
+
+    try:
+        for action in actions:
+            target = action[1]
+            action = action[0]
+
+            if not config.has_section(f'build:{target}'):
+                print("ERROR: config file has no build section for target")
+                exit(1)
+            devtarget = f'target:{config.get(f"build:{target}", "target", fallback="")}'
+            if not config.has_section(devtarget):
+                print("ERROR: config file has no section for device target")
+                exit(1)
+            toolchain = config.get(devtarget, 'toolchain', fallback="NONE")
+            if toolchain=="NONE":
+                print("ERROR: no toolchain specified for device target")
+                exit(1)
+            
+            try:
+                exec(f"from remotesyn.{toolchain}.{action} import do, needed_files, generated_files")
+            except ImportError:
+                print(f"ERROR: Unknown action '{action}' for toolchain '{toolchain}'")
+                exit(1)
+
+            # Send needed files
+            for f in needed_files(config, target):
+                send_file(channel, f)
+
+            # ret = do(config, target, print, subprocesses)
+            cmd(b'do'+sstr(f"{action} {target}"), channel)
+            ret = 0
+
+            # Get generated files
+            for f in generated_files(config, target):
+                recv_file(channel, f)
+
+            if ret!=0:
+                exit(ret)
+
+    except paramiko.ssh_exception.SSHException as e:
+        print("ERROR: Connection error...")
+        for p in subprocesses:
+            p.kill()
+        exit(0)
+
+    except KeyboardInterrupt:
+        print("\rStopping rmbuild")
+        for p in subprocesses:
+            p.kill()
+        exit(0)
