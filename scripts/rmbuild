@@ -51,8 +51,12 @@ def recv_file(channel, file):
                 break
         if status!=b'OK':
             msg = channel.recv(1024)
-            print("Error:", bytes.decode(msg, 'ascii'))
-            exit(1)
+            if bytes.decode(msg, 'ascii').startswith('File not found'):
+                print("Error: File not found...")
+                return
+            else:
+                print("Error:", bytes.decode(msg, 'ascii'))
+                exit(1)
         fsize = channel.recv(8)
         fsize = struct.unpack('>q', fsize)[0]
         print('  -> fsize', fsize)

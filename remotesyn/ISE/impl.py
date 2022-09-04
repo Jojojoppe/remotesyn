@@ -22,8 +22,14 @@ def needed_files(config, target) -> list:
 def generated_files(config, target) -> list:
     outdir = f"{config.get('project', 'out_dir', fallback='out')}"
     return [
-        f'{outdir}/{target}/impl.ngd',
         f'{outdir}/{target}/impl-ngd.log',
+        f'{outdir}/{target}/impl-map.log',
+        f'{outdir}/{target}/impl-par.log',
+        f'{outdir}/{target}/netgen.log',
+        f'{outdir}/{target}/{target}.v',
+        f'{outdir}/{target}/{target}.sdf',
+        f'{outdir}/{target}/impl.ncd',
+        f'{outdir}/{target}/impl.pcf',
     ]
 
 def do(config, target, log, subprocesses, prefix='.') -> int:
@@ -62,8 +68,59 @@ def do(config, target, log, subprocesses, prefix='.') -> int:
         shutil.copy(f'{builddir}/impl.bld', f'{outdir}/{target}/impl-ngd.log')
         return res
 
+    log(" - Executing map")
+    p = subprocess.Popen(f"map -intstyle xflow -p {device} -detail -ol high -xe n -w impl.ngd -o impl.map.ncd impl.pcf", shell=True, cwd=builddir, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocesses.append(p)
+    while p.poll() is None:
+        time.sleep(1)
+    res = p.returncode
+    if res:
+        log(" - ERROR: return code is", res)
+        log(" - copy log")
+        os.makedirs(f'{outdir}/{target}', exist_ok=True)
+        shutil.copy(f'{builddir}/impl.bld', f'{outdir}/{target}/impl-ngd.log')
+        shutil.copy(f'{builddir}/impl.map.mrp', f'{outdir}/{target}/impl-map.log')
+        return res
+
+    log(" - Executing par")
+    p = subprocess.Popen(f"par -intstyle xflow -ol high -xe n -w impl.map.ncd impl.pcf | tee impl.par.log", shell=True, cwd=builddir, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocesses.append(p)
+    while p.poll() is None:
+        time.sleep(1)
+    res = p.returncode
+    if res:
+        log(" - ERROR: return code is", res)
+        log(" - copy log")
+        os.makedirs(f'{outdir}/{target}', exist_ok=True)
+        shutil.copy(f'{builddir}/impl.bld', f'{outdir}/{target}/impl-ngd.log')
+        shutil.copy(f'{builddir}/impl.map.mrp', f'{outdir}/{target}/impl-map.log')
+        shutil.copy(f'{builddir}/impl.par.log', f'{outdir}/{target}/impl-par.log')
+        return res
+
+    log(" - Executing netgen")
+    p = subprocess.Popen(f"netgen -intstyle xflow -sim -ofmt verilog -w -insert_glbl true -sdf_anno true -ism impl.map.ncd > netgen.log", shell=True, cwd=builddir, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocesses.append(p)
+    while p.poll() is None:
+        time.sleep(1)
+    res = p.returncode
+    if res:
+        log(" - ERROR: return code is", res)
+        log(" - copy log")
+        os.makedirs(f'{outdir}/{target}', exist_ok=True)
+        shutil.copy(f'{builddir}/impl.bld', f'{outdir}/{target}/impl-ngd.log')
+        shutil.copy(f'{builddir}/impl.map.mrp', f'{outdir}/{target}/impl-map.log')
+        shutil.copy(f'{builddir}/impl.par.log', f'{outdir}/{target}/impl-par.log')
+        shutil.copy(f'{builddir}/netgen.log', f'{outdir}/{target}/netgen.log')
+        return res
+
     log(" - copy output files")
     os.makedirs(f'{outdir}/{target}', exist_ok=True)
-    shutil.copy(f'{builddir}/impl.ngd', f'{outdir}/{target}/impl.ngd')
     shutil.copy(f'{builddir}/impl.bld', f'{outdir}/{target}/impl-ngd.log')
+    shutil.copy(f'{builddir}/impl.map.mrp', f'{outdir}/{target}/impl-map.log')
+    shutil.copy(f'{builddir}/impl.par.log', f'{outdir}/{target}/impl-par.log')
+    shutil.copy(f'{builddir}/impl.pcf', f'{outdir}/{target}/impl.pcf')
+    shutil.copy(f'{builddir}/impl.pcf.ncd', f'{outdir}/{target}/impl.ncd')
+    shutil.copy(f'{builddir}/impl.map.v', f'{outdir}/{target}/{target}.v')
+    shutil.copy(f'{builddir}/impl.map.sdf', f'{outdir}/{target}/{target}.sdf')
+    shutil.copy(f'{builddir}/netgen.log', f'{outdir}/{target}/netgen.log')
     return 0

@@ -1,3 +1,5 @@
 *__pycache__
 id_rsa*
 authorized*
+*.egg-info
+server
