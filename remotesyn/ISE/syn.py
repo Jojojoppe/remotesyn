@@ -60,6 +60,7 @@ def do(config, target, log, subprocesses, prefix='.') -> int:
         f.write(f'-top {config.get(f"sources:{target}", "toplevel", fallback="toplevel")}\n')
         f.write(f'-p {device}\n-glob_opt max_delay -opt_mode speed')
 
+    log(" - Executing xst")
     p = subprocess.Popen("xst -intstyle xflow -ifn prj.scr", shell=True, cwd=builddir, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocesses.append(p)
     while p.poll() is None:
