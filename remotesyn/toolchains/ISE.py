@@ -3,6 +3,8 @@ from .util_ISE.ngdbuild import ngdbuild
 from .util_ISE.map import map
 from .util_ISE.par import par
 from .util_ISE.netgen import netgen
+from .util_ISE.bitgen import bitgen
+from .util_ISE.trce import trce
 
 def do(config, target, log, subprocesses, prefix='.'):
     log("Syntesize:")
@@ -29,7 +31,21 @@ def do(config, target, log, subprocesses, prefix='.'):
         print("ERROR: par returned with", res)
         return res
 
+    log("Generate output files")
+
     res = netgen(config, target, log, subprocesses, prefix)
     if res != 0:
         print("ERROR: netgen returned with", res)
+        return res
+
+    res = bitgen(config, target, log, subprocesses, prefix)
+    if res != 0:
+        print("ERROR: bitgen returned with", res)
+        return res
+
+    log("Analyze design")
+
+    res = trce(config, target, log, subprocesses, prefix)
+    if res != 0:
+        print("ERROR: trce returned with", res)
         return res
