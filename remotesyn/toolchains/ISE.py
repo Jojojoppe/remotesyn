@@ -15,41 +15,41 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     res = xst(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: xst returned with", res)
+        log("ERROR: xst returned with", res)
         return res
 
     log("Implement")
 
     res = ngdbuild(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: ngdbuild returned with", res)
+        log("ERROR: ngdbuild returned with", res)
         return res
 
     res = map(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: map returned with", res)
+        log("ERROR: map returned with", res)
         return res
 
     res = par(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: par returned with", res)
+        log("ERROR: par returned with", res)
         return res
 
     log("Generate output files")
 
     res = netgen(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: netgen returned with", res)
+        log("ERROR: netgen returned with", res)
         return res
 
     res = bitgen(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: bitgen returned with", res)
+        log("ERROR: bitgen returned with", res)
         return res
 
     log("Analyze design")
 
     res = trce(config, target, log, subprocesses, prefix)
     if res != 0:
-        print("ERROR: trce returned with", res)
+        log("ERROR: trce returned with", res)
         return res

@@ -29,6 +29,7 @@ def synth(config, target, log, subprocesses, prefix='.'):
 
     log(" - writing project tcl file")
     with open(f'{build_dir}/do.tcl', 'w') as f:
+        f.write('set_param general.maxThreads 8\n')
         for s in files_vhdl:
             f.write(f"read_vhdl \"{prefix}/{s}\"\n")
         for s in files_verilog:

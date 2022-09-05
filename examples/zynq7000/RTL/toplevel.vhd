@@ -34,7 +34,7 @@ architecture structural of toplevel is
     -- ----------
     -- COMPONENTS
     -- ----------
-    component zynq_ps
+    component zynqps
         port (
             FCLK_CLK0         : out std_logic;
             FCLK_RESET0_N     : out std_logic;
@@ -101,7 +101,7 @@ begin
         ARESETN => ARESETN(0),
         LED     => LED
     );
-    zynq_ps_i : component zynq_ps port map(
+    zynqps_i : component zynqps port map(
         -- MIO
         MIO => MIO,
         -- CLOCKS
