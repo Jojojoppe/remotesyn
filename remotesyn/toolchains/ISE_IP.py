@@ -1,10 +1,3 @@
-from .util_ISE.xst import xst
-from .util_ISE.ngdbuild import ngdbuild
-from .util_ISE.map import map
-from .util_ISE.par import par
-from .util_ISE.netgen import netgen
-from .util_ISE.bitgen import bitgen
-from .util_ISE.trce import trce
 from .util_ISE.coregen import coregen
 
 import shutil

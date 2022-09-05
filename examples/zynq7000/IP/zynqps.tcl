@@ -1,0 +1,16 @@
+create_ip -vlnv xilinx.com:ip:processing_system7 -module_name zynqps
+set_property -dict [ list \
+    CONFIG.PCW_UIPARAM_DDR_BUS_WIDTH {16 Bit} \
+    CONFIG.PCW_UIPARAM_DDR_PARTNO {MT41K256M16 RE-125} \
+    CONFIG.PCW_UART1_PERIPHERAL_ENABLE {1} \
+    CONFIG.PCW_UART1_UART1_IO {MIO 44 .. 45} \
+    CONFIG.PCW_FPGA0_PERIPHERAL_FREQMHZ {100} \
+    CONFIG.PCW_USE_S_AXI_GP0 {0} \
+    CONFIG.PCW_USE_M_AXI_GP0 {0} \
+    CONFIG.PCW_USE_S_AXI_GP1 {0} \
+    CONFIG.PCW_USE_M_AXI_GP1 {0} \
+    CONFIG.PCW_USE_S_AXI_HP0 {0} \
+    CONFIG.PCW_USE_S_AXI_HP1 {0} \
+    CONFIG.PCW_USE_S_AXI_HP2 {0} \
+    CONFIG.PCW_USE_S_AXI_HP3 {0} \
+] [ get_ips zynqps ]
