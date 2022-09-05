@@ -9,7 +9,7 @@ def synth(config, target, log, subprocesses, prefix='.'):
     package = config.get(f'target.{target}', 'package', fallback='')
     speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
-    netlist_top = config.get(f'target.{target}', 'netlist_top', fallback='toplevel')
+    netlist_top = config.get(f'target.{target}', 'netlist_top', fallback='toplevel').split()
     files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
     files_sysverilog = config.get(f'target.{target}', 'files_sysverilog', fallback='').split()
@@ -44,8 +44,8 @@ def synth(config, target, log, subprocesses, prefix='.'):
         f.write(f"set_property part {device}{package}{speedgrade} [current_project]\n")
         f.write(f"upgrade_ip [get_ips]\ngenerate_target all [get_ips]\nsynth_ip [get_ips]\n")
         f.write(f"synth_design -top {toplevel} -part {device}{package}{speedgrade} {synth_opts}\n")
-        f.write(f"write_checkpoint -force post_synth.dcp\nwrite_verilog -force -mode timesim -cell {netlist_top} -sdf_anno true -nolib netlist.v\n")
-        f.write(f"write_sdf -force -cell {netlist_top} -mode timesim netlist.sdf\n")
+        f.write(f"write_checkpoint -force post_synth.dcp\nwrite_verilog -force -mode timesim -cell {netlist_top[0]} -rename_top {netlist_top[1]} -sdf_anno true -nolib -sdf_file synth_netlist.sdf synth_netlist.v\n")
+        f.write(f"write_sdf -force -cell {netlist_top[0]} -rename_top {netlist_top[1]} -mode timesim synth_netlist.sdf\n")
 
     log(" - run vivado")
     p = subprocess.Popen(f"vivado -mode batch -source do.tcl", 
@@ -63,8 +63,8 @@ def synth(config, target, log, subprocesses, prefix='.'):
         return res
     
     log(" - copy output files")
-    shutil.copy(f'{build_dir}/netlist.v', f'{out_dir}/synth_netlist.v')
-    shutil.copy(f'{build_dir}/netlist.sdf', f'{out_dir}/synth_netlist.sdf')
+    shutil.copy(f'{build_dir}/synth_netlist.v', f'{out_dir}/synth_netlist.v')
+    shutil.copy(f'{build_dir}/synth_netlist.sdf', f'{out_dir}/synth_netlist.sdf')
     shutil.copy(f'{build_dir}/post_synth.dcp', f'{out_dir}/post_synth.dcp')
 
     return res

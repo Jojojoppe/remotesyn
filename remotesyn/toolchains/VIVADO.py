@@ -30,3 +30,5 @@ def do(config, target, log, subprocesses, prefix='.'):
     if res != 0:
         log("ERROR: vivado returned with", res)
         return res
+
+    return 0

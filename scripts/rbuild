@@ -5,7 +5,7 @@ import sys
 
 def print_help():
     print("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
-    print(f"Usage: {sys.argv[0]} [ OPTIONS ] target")
+    print(f"Usage: {sys.argv[0]} [ OPTIONS ] target ...")
     print("")
     print("Options:")
     print("  -h                 Show this help message")
@@ -16,7 +16,7 @@ if __name__=="__main__":
     i = 1
     nextarg = None
     configpath = 'project.cfg'
-    target = ''
+    targets = []
     while i<len(sys.argv):
         if nextarg is not None:
             if nextarg=='config':
@@ -30,7 +30,7 @@ if __name__=="__main__":
         elif sys.argv[i]=='-c':
             nextarg = 'config'
         else:
-            target = sys.argv[i]
+            targets.append(sys.argv[i])
         i += 1
     if nextarg is not None:
         print("ERROR: expected more arguments")
@@ -43,21 +43,26 @@ if __name__=="__main__":
 
     try:
 
-        toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
-        if toolchain=='NONE':
-            print("ERROR: No toolchain specified for target")
-            exit(1)
-        
-        try:
-            exec(f"from remotesyn.toolchains.{toolchain} import do")
-        except ImportError:
-            print(f"ERROR: Unknown toolchain '{toolchain}'")
-            exit(1)
+        for target in targets:
 
-        ret = do(config, target, print, subprocesses)
+            print("Target", target)
 
-        if ret!=0:
-            exit(ret)
+            toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
+            if toolchain=='NONE':
+                print("ERROR: No toolchain specified for target")
+                exit(1)
+            
+            try:
+                exec(f"from remotesyn.toolchains.{toolchain} import do")
+            except ImportError:
+                print(f"ERROR: Unknown toolchain '{toolchain}'")
+                exit(1)
+
+            ret = do(config, target, print, subprocesses)
+
+            if ret!=0:
+                print("ERROR: toolchain returned with", ret)
+                exit(ret)
 
     except KeyboardInterrupt:
         print("\rStopping rbuild")

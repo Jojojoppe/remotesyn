@@ -12792,31 +12792,31 @@
         </spirit:segment>
         <spirit:segment>
           <spirit:name>IO_Peripheral_Registers</spirit:name>
-          <spirit:displayName>IOPeripheralRegisters</spirit:displayName>
+          <spirit:displayName>IO Peripheral Registers</spirit:displayName>
           <spirit:addressOffset spirit:format="bitString" spirit:bitStringLength="32">0xe0000000</spirit:addressOffset>
           <spirit:range spirit:format="bitString" spirit:bitStringLength="32">0x00300000</spirit:range>
         </spirit:segment>
         <spirit:segment>
           <spirit:name>SMC_Memories</spirit:name>
-          <spirit:displayName>SMCMemories</spirit:displayName>
+          <spirit:displayName>SMC Memories</spirit:displayName>
           <spirit:addressOffset spirit:format="bitString" spirit:bitStringLength="32">0xe1000000</spirit:addressOffset>
           <spirit:range spirit:format="bitString" spirit:bitStringLength="32">0x05000000</spirit:range>
         </spirit:segment>
         <spirit:segment>
           <spirit:name>SLCR_Registers</spirit:name>
-          <spirit:displayName>SLCRRegisters</spirit:displayName>
+          <spirit:displayName>SLCR Registers</spirit:displayName>
           <spirit:addressOffset spirit:format="bitString" spirit:bitStringLength="32">0xf8000000</spirit:addressOffset>
           <spirit:range spirit:format="bitString" spirit:bitStringLength="32">0x00000c00</spirit:range>
         </spirit:segment>
         <spirit:segment>
           <spirit:name>PS_System_Registers</spirit:name>
-          <spirit:displayName>PSSystemRegisters</spirit:displayName>
+          <spirit:displayName>PS System Registers</spirit:displayName>
           <spirit:addressOffset spirit:format="bitString" spirit:bitStringLength="32">0xf8001000</spirit:addressOffset>
           <spirit:range spirit:format="bitString" spirit:bitStringLength="32">0x0080f000</spirit:range>
         </spirit:segment>
         <spirit:segment>
           <spirit:name>CPU_Private_Registers</spirit:name>
-          <spirit:displayName>CPUPrivateRegisters</spirit:displayName>
+          <spirit:displayName>CPU Private Registers</spirit:displayName>
           <spirit:addressOffset spirit:format="bitString" spirit:bitStringLength="32">0xf8900000</spirit:addressOffset>
           <spirit:range spirit:format="bitString" spirit:bitStringLength="32">0x00603000</spirit:range>
         </spirit:segment>
@@ -14990,7 +14990,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:03 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:37 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15009,7 +15009,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:14 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15040,7 +15040,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:14 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15081,7 +15081,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:14 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15104,7 +15104,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:14 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15127,7 +15127,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:15 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15147,7 +15147,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:15 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:49 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15170,7 +15170,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:15 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:50 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15192,7 +15192,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:15 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:50 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15210,7 +15210,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:06:15 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:38:50 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -15228,7 +15228,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Sep 05 13:07:17 UTC 2022</spirit:value>
+            <spirit:value>Mon Sep 05 14:39:19 UTC 2022</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
@@ -31944,10 +31944,6 @@
       <spirit:enumeration>slow</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
-      <spirit:name>choice_list_44945da6</spirit:name>
-      <spirit:enumeration>NA</spirit:enumeration>
-    </spirit:choice>
-    <spirit:choice>
       <spirit:name>choice_list_45a0fd9c</spirit:name>
       <spirit:enumeration>&lt;Select></spirit:enumeration>
       <spirit:enumeration>EMIO</spirit:enumeration>
@@ -32163,6 +32159,11 @@
     <spirit:choice>
       <spirit:name>choice_list_767f870c</spirit:name>
       <spirit:enumeration>External</spirit:enumeration>
+    </spirit:choice>
+    <spirit:choice>
+      <spirit:name>choice_list_7abc2131</spirit:name>
+      <spirit:enumeration>16 Bit</spirit:enumeration>
+      <spirit:enumeration>32 Bit</spirit:enumeration>
     </spirit:choice>
     <spirit:choice>
       <spirit:name>choice_list_7bfdc3d8</spirit:name>
@@ -34395,7 +34396,7 @@
     <spirit:parameter>
       <spirit:name>PCW_FPGA0_PERIPHERAL_FREQMHZ</spirit:name>
       <spirit:displayName>PCW FPGA0 PERIPHERAL FREQMHZ</spirit:displayName>
-      <spirit:value spirit:format="float" spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_FPGA0_PERIPHERAL_FREQMHZ" spirit:order="26000" spirit:minimum="-2" spirit:maximum="-1">100</spirit:value>
+      <spirit:value spirit:format="float" spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_FPGA0_PERIPHERAL_FREQMHZ" spirit:order="26000" spirit:minimum="0.100000" spirit:maximum="250.000000">100</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>PCW_FPGA1_PERIPHERAL_FREQMHZ</spirit:name>
@@ -36650,7 +36651,7 @@
     <spirit:parameter>
       <spirit:name>PCW_UIPARAM_DDR_BUS_WIDTH</spirit:name>
       <spirit:displayName>PCW UIPARAM DDR BUS WIDTH</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_UIPARAM_DDR_BUS_WIDTH" spirit:choiceRef="choice_list_44945da6" spirit:order="13100">16 Bit</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_UIPARAM_DDR_BUS_WIDTH" spirit:choiceRef="choice_list_7abc2131" spirit:order="13100">16 Bit</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>PCW_UIPARAM_DDR_BL</spirit:name>
@@ -37627,7 +37628,7 @@
     <spirit:parameter>
       <spirit:name>PCW_UART1_PERIPHERAL_ENABLE</spirit:name>
       <spirit:displayName>PCW UART1 PERIPHERAL ENABLE</spirit:displayName>
-      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_UART1_PERIPHERAL_ENABLE" spirit:choiceRef="choice_list_44945da6" spirit:order="900">1</spirit:value>
+      <spirit:value spirit:resolve="user" spirit:id="PARAM_VALUE.PCW_UART1_PERIPHERAL_ENABLE" spirit:choiceRef="choice_list_8af5a703" spirit:order="900">1</spirit:value>
     </spirit:parameter>
     <spirit:parameter>
       <spirit:name>PCW_UART1_UART1_IO</spirit:name>

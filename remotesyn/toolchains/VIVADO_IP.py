@@ -59,3 +59,4 @@ def do(config, target, log, subprocesses, prefix='.'):
             log("ERROR: vivado returned with:", res)
             return res
 
+    return 0

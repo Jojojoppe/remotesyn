@@ -85,7 +85,7 @@ def recv_dir(channel, dr):
 
 def print_help():
     print("Unified FPGA synthesizer frontend - remote execution\r\n(c) Joppe Blondel - 2022\r\n")
-    print(f"Usage: {sys.argv[0]} [ OPTIONS ] action [ target ] ...")
+    print(f"Usage: {sys.argv[0]} [ OPTIONS ] target ...")
     print("")
     print("Options:")
     print("  -h                 Show this help message")
@@ -96,7 +96,7 @@ if __name__=="__main__":
     i = 1
     nextarg = None
     configpath = 'project.cfg'
-    target = ''
+    targets = []
     while i<len(sys.argv):
         if nextarg is not None:
             if nextarg=='config':
@@ -110,7 +110,7 @@ if __name__=="__main__":
         elif sys.argv[i]=='-c':
             nextarg = 'config'
         else:
-            target = sys.argv[i]
+            targets.append(sys.argv[i])
         i += 1
     if nextarg is not None:
         print("ERROR: expected more arguments")
@@ -149,31 +149,36 @@ if __name__=="__main__":
         # Send config
         cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
 
-        toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
-        if toolchain=='NONE':
-            print("ERROR: No toolchain specified for target")
-            exit(1)
-        
-        try:
-            exec(f"from remotesyn.toolchains.{toolchain} import do")
-        except ImportError:
-            print(f"ERROR: Unknown toolchain '{toolchain}'")
-            exit(1)
+        for target in targets:
+            
+            print("Target", target)
 
-        # Send all files
-        for it in config.items(f"target.{target}"):
-            if it[0].startswith('files_'):
-                for f in it[1].split():
-                    send_file(channel, f)
+            toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
+            if toolchain=='NONE':
+                print("ERROR: No toolchain specified for target")
+                exit(1)
+            
+            try:
+                exec(f"from remotesyn.toolchains.{toolchain} import do")
+            except ImportError:
+                print(f"ERROR: Unknown toolchain '{toolchain}'")
+                exit(1)
 
-        cmd(b'do'+sstr(target), channel)
-        ret = 0
+            # Send all files
+            for it in config.items(f"target.{target}"):
+                if it[0].startswith('files_'):
+                    for f in it[1].split():
+                        send_file(channel, f)
 
-        # Receive output dir
-        recv_dir(channel, config.get('project', 'out_dir', fallback='out'))
+            cmd(b'do'+sstr(target), channel)
+            ret = 0
 
-        if ret!=0:
-            exit(ret)
+            # Receive output dir
+            recv_dir(channel, config.get('project', 'out_dir', fallback='out'))
+
+            if ret!=0:
+                print("ERROR: toolchain returned with", ret)
+                exit(ret)
 
     except paramiko.ssh_exception.SSHException as e:
         print("ERROR: Connection error...", e)

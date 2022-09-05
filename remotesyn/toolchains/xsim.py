@@ -9,9 +9,6 @@ def do(config, target, log, subprocesses, prefix='.'):
     log("Starting simulation")
 
     log(" - parsing options")
-    device = config.get(f'target.{target}', 'device', fallback='')
-    package = config.get(f'target.{target}', 'package', fallback='')
-    speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
     runtime = config.get(f'target.{target}', 'runtime', fallback='100 ns')
     xelab_opts = config.get(f'target.{target}', 'xelab_opts', fallback='')
@@ -19,12 +16,15 @@ def do(config, target, log, subprocesses, prefix='.'):
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
     files_sysverilog = config.get(f'target.{target}', 'files_sysverilog', fallback='').split()
     files_xci = config.get(f'target.{target}', 'files_xci', fallback='').split()
+    files_other = config.get(f'target.{target}', 'files_other', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
     prefix = f'{os.getcwd()}/{prefix}'
     build_dir = f'{prefix}/{build_dir}'
     out_dir = f'{prefix}/{out_dir}/{target}'
+
+    xelab_opts = xelab_opts.replace('\n', ' ')
 
     log(" - creating output directories")
     os.makedirs(build_dir, exist_ok=True)
@@ -45,6 +45,9 @@ def do(config, target, log, subprocesses, prefix='.'):
             f.write(f"import_files -norecurse \"{prefix}/{s}\"\n")
         for s in files_xci:
             f.write(f"add_files -norecurse -scan_for_includes \"{prefix}/{s}\"\n")
+        for s in files_other:
+            f.write(f"add_files -norecurse -scan_for_includes \"{prefix}/{s}\"\n")
+            f.write(f"import_files -norecurse \"{prefix}/{s}\"\n")
         # TODO C files for VPI
 
         f.write(f"set_property top {toplevel} [get_filesets sim_1]\n")
@@ -65,6 +68,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     shutil.copy(f'{build_dir}/vivado.log', f'{out_dir}/synth.log')
 
     if res!=0:
+        log("ERROR: vivado returned with", res)
         return res
 
     log(" - patch run scripts")
@@ -78,22 +82,27 @@ def do(config, target, log, subprocesses, prefix='.'):
     res = p.returncode
 
     if res!=0:
+        log("ERROR: patch returned with", res)
         return res
 
-    # needed for postsim?
-    # p = subprocess.Popen(f"sed -i '/ \/I /d' netlist.sdf >> {build_dir}/patch.log && sed -i '/glbl.v/d' *.prj >> {build_dir}/patch.log", 
-    #     shell=True, cwd=f'{build_dir}/sim/sim.sim/sim_1/behav/xsim', 
-    #     stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    # subprocesses.append(p)
-    # while p.poll() is None:
-    #     time.sleep(1)
-    # res = p.returncode
+    log(" - copy other files to simulation environment")
+    for f in files_other:
+        shutil.copy(f'{prefix}/{f}', f'{build_dir}/sim/sim.sim/sim_1/behav/xsim')
+        if f.endswith('.sdf'):
+            #patch sdf file
+            fname = f.split('/')[-1]
+            log(f"  (patching {fname})")
+            p = subprocess.Popen(f"sed -i '/ \/I /d' {fname} && sed -i '/glbl.v/d' *.prj", 
+                shell=True, cwd=f'{build_dir}/sim/sim.sim/sim_1/behav/xsim', 
+                stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocesses.append(p)
+            while p.poll() is None:
+                time.sleep(1)
+            res = p.returncode
 
-    # log(" - copy logs")
-    # shutil.copy(f'{build_dir}/patch.log', f'{out_dir}/patch.log')
-
-    # if res!=0:
-    #     return res
+            if res!=0:
+                log("ERROR: Patching went wrong...")
+                return res
 
     log(" - compile")
 
@@ -109,6 +118,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/compile.log', f'{out_dir}/compile.log')
 
     if res!=0:
+        log("ERROR: compile returned with", res)
         return res
 
     log(" - elaborate")
@@ -125,6 +135,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/elaborate.log', f'{out_dir}/elaborate.log')
 
     if res!=0:
+        log("ERROR: elaborate returned with", res)
         return res
 
     log(" - write simulation script")
@@ -145,6 +156,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/simulate.log', f'{out_dir}/simulate.log')
 
     if res!=0:
+        log("ERROR: patch simulate with", res)
         return res
 
     log(" - copy output files")

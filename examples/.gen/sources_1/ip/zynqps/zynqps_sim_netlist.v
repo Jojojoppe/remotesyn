@@ -1,7 +1,7 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-// Date        : Mon Sep  5 15:07:17 2022
+// Date        : Mon Sep  5 16:39:19 2022
 // Host        : NotSoStraightDPC running 64-bit Arch Linux
 // Command     : write_verilog -force -mode funcsim
 //               /media/ssd/files/Projects/remotesyn/examples/.gen/sources_1/ip/zynqps/zynqps_sim_netlist.v
@@ -12,7 +12,7 @@
 // --------------------------------------------------------------------------------
 `timescale 1 ps / 1 ps
 
-(* CHECK_LICENSE_TYPE = "zynqps,processing_system7_v5_5_processing_system7,{}" *) (* downgradeipidentifiedwarnings = "yes" *) (* x_core_info = "processing_system7_v5_5_processing_system7,Vivado 2021.2" *) 
+(* CHECK_LICENSE_TYPE = "zynqps,processing_system7_v5_5_processing_system7,{}" *) (* DowngradeIPIdentifiedWarnings = "yes" *) (* X_CORE_INFO = "processing_system7_v5_5_processing_system7,Vivado 2021.2" *) 
 (* NotValidForBitStream *)
 module zynqps
    (FCLK_CLK0,
@@ -38,29 +38,29 @@ module zynqps
     PS_SRSTB,
     PS_CLK,
     PS_PORB);
-  (* x_interface_info = "xilinx.com:signal:clock:1.0 FCLK_CLK0 CLK" *) (* x_interface_parameter = "XIL_INTERFACENAME FCLK_CLK0, FREQ_HZ 1e+08, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *) output FCLK_CLK0;
-  (* x_interface_info = "xilinx.com:signal:reset:1.0 FCLK_RESET0_N RST" *) (* x_interface_parameter = "XIL_INTERFACENAME FCLK_RESET0_N, POLARITY ACTIVE_LOW, INSERT_VIP 0" *) output FCLK_RESET0_N;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO MIO" *) inout [53:0]MIO;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR CAS_N" *) inout DDR_CAS_n;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR CKE" *) inout DDR_CKE;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR CK_N" *) inout DDR_Clk_n;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR CK_P" *) inout DDR_Clk;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR CS_N" *) inout DDR_CS_n;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR RESET_N" *) inout DDR_DRSTB;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR ODT" *) inout DDR_ODT;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR RAS_N" *) inout DDR_RAS_n;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR WE_N" *) inout DDR_WEB;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR BA" *) inout [2:0]DDR_BankAddr;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR ADDR" *) inout [14:0]DDR_Addr;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO DDR_VRN" *) inout DDR_VRN;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO DDR_VRP" *) inout DDR_VRP;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR DM" *) inout [3:0]DDR_DM;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR DQ" *) inout [31:0]DDR_DQ;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR DQS_N" *) inout [3:0]DDR_DQS_n;
-  (* x_interface_info = "xilinx.com:interface:ddrx:1.0 DDR DQS_P" *) (* x_interface_parameter = "XIL_INTERFACENAME DDR, CAN_DEBUG false, TIMEPERIOD_PS 1250, MEMORY_TYPE COMPONENTS, DATA_WIDTH 8, CS_ENABLED true, DATA_MASK_ENABLED true, SLOT Single, MEM_ADDR_MAP ROW_COLUMN_BANK, BURST_LENGTH 8, AXI_ARBITRATION_SCHEME TDM, CAS_LATENCY 11, CAS_WRITE_LATENCY 11" *) inout [3:0]DDR_DQS;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_SRSTB" *) inout PS_SRSTB;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_CLK" *) inout PS_CLK;
-  (* x_interface_info = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_PORB" *) (* x_interface_parameter = "XIL_INTERFACENAME FIXED_IO, CAN_DEBUG false" *) inout PS_PORB;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:clock:1.0 FCLK_CLK0 CLK" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME FCLK_CLK0, FREQ_HZ 1e+08, FREQ_TOLERANCE_HZ 0, PHASE 0.0, INSERT_VIP 0" *) output FCLK_CLK0;
+  (* X_INTERFACE_INFO = "xilinx.com:signal:reset:1.0 FCLK_RESET0_N RST" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME FCLK_RESET0_N, POLARITY ACTIVE_LOW, INSERT_VIP 0" *) output FCLK_RESET0_N;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO MIO" *) inout [53:0]MIO;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR CAS_N" *) inout DDR_CAS_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR CKE" *) inout DDR_CKE;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR CK_N" *) inout DDR_Clk_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR CK_P" *) inout DDR_Clk;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR CS_N" *) inout DDR_CS_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR RESET_N" *) inout DDR_DRSTB;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR ODT" *) inout DDR_ODT;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR RAS_N" *) inout DDR_RAS_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR WE_N" *) inout DDR_WEB;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR BA" *) inout [2:0]DDR_BankAddr;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR ADDR" *) inout [14:0]DDR_Addr;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO DDR_VRN" *) inout DDR_VRN;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO DDR_VRP" *) inout DDR_VRP;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR DM" *) inout [3:0]DDR_DM;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR DQ" *) inout [31:0]DDR_DQ;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR DQS_N" *) inout [3:0]DDR_DQS_n;
+  (* X_INTERFACE_INFO = "xilinx.com:interface:ddrx:1.0 DDR DQS_P" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME DDR, CAN_DEBUG false, TIMEPERIOD_PS 1250, MEMORY_TYPE COMPONENTS, DATA_WIDTH 8, CS_ENABLED true, DATA_MASK_ENABLED true, SLOT Single, MEM_ADDR_MAP ROW_COLUMN_BANK, BURST_LENGTH 8, AXI_ARBITRATION_SCHEME TDM, CAS_LATENCY 11, CAS_WRITE_LATENCY 11" *) inout [3:0]DDR_DQS;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_SRSTB" *) inout PS_SRSTB;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_CLK" *) inout PS_CLK;
+  (* X_INTERFACE_INFO = "xilinx.com:display_processing_system7:fixedio:1.0 FIXED_IO PS_PORB" *) (* X_INTERFACE_PARAMETER = "XIL_INTERFACENAME FIXED_IO, CAN_DEBUG false" *) inout PS_PORB;
 
   wire [14:0]DDR_Addr;
   wire [2:0]DDR_BankAddr;
@@ -5312,53 +5312,53 @@ module zynqpsprocessing_system7_v5_5_processing_system7
   assign USB1_PORT_INDCTL[0] = \<const0> ;
   assign USB1_VBUS_PWRSELECT = \<const0> ;
   assign WDT_RST_OUT = \<const0> ;
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_CAS_n_BIBUF
        (.IO(buffered_DDR_CAS_n),
         .PAD(DDR_CAS_n));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_CKE_BIBUF
        (.IO(buffered_DDR_CKE),
         .PAD(DDR_CKE));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_CS_n_BIBUF
        (.IO(buffered_DDR_CS_n),
         .PAD(DDR_CS_n));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_Clk_BIBUF
        (.IO(buffered_DDR_Clk),
         .PAD(DDR_Clk));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_Clk_n_BIBUF
        (.IO(buffered_DDR_Clk_n),
         .PAD(DDR_Clk_n));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_DRSTB_BIBUF
        (.IO(buffered_DDR_DRSTB),
         .PAD(DDR_DRSTB));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_ODT_BIBUF
        (.IO(buffered_DDR_ODT),
         .PAD(DDR_ODT));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_RAS_n_BIBUF
        (.IO(buffered_DDR_RAS_n),
         .PAD(DDR_RAS_n));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_VRN_BIBUF
        (.IO(buffered_DDR_VRN),
         .PAD(DDR_VRN));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_VRP_BIBUF
        (.IO(buffered_DDR_VRP),
         .PAD(DDR_VRP));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF DDR_WEB_BIBUF
        (.IO(buffered_DDR_WEB),
         .PAD(DDR_WEB));
   GND GND
        (.G(\<const0> ));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   PS7 PS7_i
        (.DDRA(buffered_DDR_Addr),
         .DDRARB({1'b0,1'b0,1'b0,1'b0}),
@@ -5980,483 +5980,483 @@ module zynqpsprocessing_system7_v5_5_processing_system7
         .SAXIHP3WRISSUECAP1EN(1'b0),
         .SAXIHP3WSTRB({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
         .SAXIHP3WVALID(1'b0));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF PS_CLK_BIBUF
        (.IO(buffered_PS_CLK),
         .PAD(PS_CLK));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF PS_PORB_BIBUF
        (.IO(buffered_PS_PORB),
         .PAD(PS_PORB));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF PS_SRSTB_BIBUF
        (.IO(buffered_PS_SRSTB),
         .PAD(PS_SRSTB));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BUFG \buffer_fclk_clk_0.FCLK_CLK_0_BUFG 
        (.I(FCLK_CLK_unbuffered),
         .O(FCLK_CLK0));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[0].MIO_BIBUF 
        (.IO(buffered_MIO[0]),
         .PAD(MIO[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[10].MIO_BIBUF 
        (.IO(buffered_MIO[10]),
         .PAD(MIO[10]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[11].MIO_BIBUF 
        (.IO(buffered_MIO[11]),
         .PAD(MIO[11]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[12].MIO_BIBUF 
        (.IO(buffered_MIO[12]),
         .PAD(MIO[12]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[13].MIO_BIBUF 
        (.IO(buffered_MIO[13]),
         .PAD(MIO[13]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[14].MIO_BIBUF 
        (.IO(buffered_MIO[14]),
         .PAD(MIO[14]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[15].MIO_BIBUF 
        (.IO(buffered_MIO[15]),
         .PAD(MIO[15]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[16].MIO_BIBUF 
        (.IO(buffered_MIO[16]),
         .PAD(MIO[16]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[17].MIO_BIBUF 
        (.IO(buffered_MIO[17]),
         .PAD(MIO[17]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[18].MIO_BIBUF 
        (.IO(buffered_MIO[18]),
         .PAD(MIO[18]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[19].MIO_BIBUF 
        (.IO(buffered_MIO[19]),
         .PAD(MIO[19]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[1].MIO_BIBUF 
        (.IO(buffered_MIO[1]),
         .PAD(MIO[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[20].MIO_BIBUF 
        (.IO(buffered_MIO[20]),
         .PAD(MIO[20]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[21].MIO_BIBUF 
        (.IO(buffered_MIO[21]),
         .PAD(MIO[21]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[22].MIO_BIBUF 
        (.IO(buffered_MIO[22]),
         .PAD(MIO[22]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[23].MIO_BIBUF 
        (.IO(buffered_MIO[23]),
         .PAD(MIO[23]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[24].MIO_BIBUF 
        (.IO(buffered_MIO[24]),
         .PAD(MIO[24]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[25].MIO_BIBUF 
        (.IO(buffered_MIO[25]),
         .PAD(MIO[25]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[26].MIO_BIBUF 
        (.IO(buffered_MIO[26]),
         .PAD(MIO[26]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[27].MIO_BIBUF 
        (.IO(buffered_MIO[27]),
         .PAD(MIO[27]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[28].MIO_BIBUF 
        (.IO(buffered_MIO[28]),
         .PAD(MIO[28]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[29].MIO_BIBUF 
        (.IO(buffered_MIO[29]),
         .PAD(MIO[29]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[2].MIO_BIBUF 
        (.IO(buffered_MIO[2]),
         .PAD(MIO[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[30].MIO_BIBUF 
        (.IO(buffered_MIO[30]),
         .PAD(MIO[30]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[31].MIO_BIBUF 
        (.IO(buffered_MIO[31]),
         .PAD(MIO[31]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[32].MIO_BIBUF 
        (.IO(buffered_MIO[32]),
         .PAD(MIO[32]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[33].MIO_BIBUF 
        (.IO(buffered_MIO[33]),
         .PAD(MIO[33]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[34].MIO_BIBUF 
        (.IO(buffered_MIO[34]),
         .PAD(MIO[34]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[35].MIO_BIBUF 
        (.IO(buffered_MIO[35]),
         .PAD(MIO[35]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[36].MIO_BIBUF 
        (.IO(buffered_MIO[36]),
         .PAD(MIO[36]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[37].MIO_BIBUF 
        (.IO(buffered_MIO[37]),
         .PAD(MIO[37]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[38].MIO_BIBUF 
        (.IO(buffered_MIO[38]),
         .PAD(MIO[38]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[39].MIO_BIBUF 
        (.IO(buffered_MIO[39]),
         .PAD(MIO[39]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[3].MIO_BIBUF 
        (.IO(buffered_MIO[3]),
         .PAD(MIO[3]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[40].MIO_BIBUF 
        (.IO(buffered_MIO[40]),
         .PAD(MIO[40]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[41].MIO_BIBUF 
        (.IO(buffered_MIO[41]),
         .PAD(MIO[41]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[42].MIO_BIBUF 
        (.IO(buffered_MIO[42]),
         .PAD(MIO[42]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[43].MIO_BIBUF 
        (.IO(buffered_MIO[43]),
         .PAD(MIO[43]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[44].MIO_BIBUF 
        (.IO(buffered_MIO[44]),
         .PAD(MIO[44]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[45].MIO_BIBUF 
        (.IO(buffered_MIO[45]),
         .PAD(MIO[45]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[46].MIO_BIBUF 
        (.IO(buffered_MIO[46]),
         .PAD(MIO[46]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[47].MIO_BIBUF 
        (.IO(buffered_MIO[47]),
         .PAD(MIO[47]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[48].MIO_BIBUF 
        (.IO(buffered_MIO[48]),
         .PAD(MIO[48]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[49].MIO_BIBUF 
        (.IO(buffered_MIO[49]),
         .PAD(MIO[49]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[4].MIO_BIBUF 
        (.IO(buffered_MIO[4]),
         .PAD(MIO[4]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[50].MIO_BIBUF 
        (.IO(buffered_MIO[50]),
         .PAD(MIO[50]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[51].MIO_BIBUF 
        (.IO(buffered_MIO[51]),
         .PAD(MIO[51]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[52].MIO_BIBUF 
        (.IO(buffered_MIO[52]),
         .PAD(MIO[52]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[53].MIO_BIBUF 
        (.IO(buffered_MIO[53]),
         .PAD(MIO[53]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[5].MIO_BIBUF 
        (.IO(buffered_MIO[5]),
         .PAD(MIO[5]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[6].MIO_BIBUF 
        (.IO(buffered_MIO[6]),
         .PAD(MIO[6]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[7].MIO_BIBUF 
        (.IO(buffered_MIO[7]),
         .PAD(MIO[7]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[8].MIO_BIBUF 
        (.IO(buffered_MIO[8]),
         .PAD(MIO[8]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk13[9].MIO_BIBUF 
        (.IO(buffered_MIO[9]),
         .PAD(MIO[9]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk14[0].DDR_BankAddr_BIBUF 
        (.IO(buffered_DDR_BankAddr[0]),
         .PAD(DDR_BankAddr[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk14[1].DDR_BankAddr_BIBUF 
        (.IO(buffered_DDR_BankAddr[1]),
         .PAD(DDR_BankAddr[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk14[2].DDR_BankAddr_BIBUF 
        (.IO(buffered_DDR_BankAddr[2]),
         .PAD(DDR_BankAddr[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[0].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[0]),
         .PAD(DDR_Addr[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[10].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[10]),
         .PAD(DDR_Addr[10]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[11].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[11]),
         .PAD(DDR_Addr[11]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[12].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[12]),
         .PAD(DDR_Addr[12]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[13].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[13]),
         .PAD(DDR_Addr[13]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[14].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[14]),
         .PAD(DDR_Addr[14]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[1].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[1]),
         .PAD(DDR_Addr[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[2].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[2]),
         .PAD(DDR_Addr[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[3].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[3]),
         .PAD(DDR_Addr[3]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[4].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[4]),
         .PAD(DDR_Addr[4]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[5].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[5]),
         .PAD(DDR_Addr[5]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[6].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[6]),
         .PAD(DDR_Addr[6]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[7].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[7]),
         .PAD(DDR_Addr[7]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[8].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[8]),
         .PAD(DDR_Addr[8]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk15[9].DDR_Addr_BIBUF 
        (.IO(buffered_DDR_Addr[9]),
         .PAD(DDR_Addr[9]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk16[0].DDR_DM_BIBUF 
        (.IO(buffered_DDR_DM[0]),
         .PAD(DDR_DM[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk16[1].DDR_DM_BIBUF 
        (.IO(buffered_DDR_DM[1]),
         .PAD(DDR_DM[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk16[2].DDR_DM_BIBUF 
        (.IO(buffered_DDR_DM[2]),
         .PAD(DDR_DM[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk16[3].DDR_DM_BIBUF 
        (.IO(buffered_DDR_DM[3]),
         .PAD(DDR_DM[3]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[0].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[0]),
         .PAD(DDR_DQ[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[10].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[10]),
         .PAD(DDR_DQ[10]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[11].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[11]),
         .PAD(DDR_DQ[11]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[12].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[12]),
         .PAD(DDR_DQ[12]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[13].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[13]),
         .PAD(DDR_DQ[13]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[14].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[14]),
         .PAD(DDR_DQ[14]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[15].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[15]),
         .PAD(DDR_DQ[15]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[16].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[16]),
         .PAD(DDR_DQ[16]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[17].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[17]),
         .PAD(DDR_DQ[17]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[18].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[18]),
         .PAD(DDR_DQ[18]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[19].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[19]),
         .PAD(DDR_DQ[19]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[1].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[1]),
         .PAD(DDR_DQ[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[20].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[20]),
         .PAD(DDR_DQ[20]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[21].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[21]),
         .PAD(DDR_DQ[21]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[22].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[22]),
         .PAD(DDR_DQ[22]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[23].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[23]),
         .PAD(DDR_DQ[23]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[24].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[24]),
         .PAD(DDR_DQ[24]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[25].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[25]),
         .PAD(DDR_DQ[25]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[26].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[26]),
         .PAD(DDR_DQ[26]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[27].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[27]),
         .PAD(DDR_DQ[27]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[28].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[28]),
         .PAD(DDR_DQ[28]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[29].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[29]),
         .PAD(DDR_DQ[29]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[2].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[2]),
         .PAD(DDR_DQ[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[30].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[30]),
         .PAD(DDR_DQ[30]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[31].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[31]),
         .PAD(DDR_DQ[31]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[3].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[3]),
         .PAD(DDR_DQ[3]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[4].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[4]),
         .PAD(DDR_DQ[4]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[5].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[5]),
         .PAD(DDR_DQ[5]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[6].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[6]),
         .PAD(DDR_DQ[6]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[7].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[7]),
         .PAD(DDR_DQ[7]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[8].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[8]),
         .PAD(DDR_DQ[8]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk17[9].DDR_DQ_BIBUF 
        (.IO(buffered_DDR_DQ[9]),
         .PAD(DDR_DQ[9]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk18[0].DDR_DQS_n_BIBUF 
        (.IO(buffered_DDR_DQS_n[0]),
         .PAD(DDR_DQS_n[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk18[1].DDR_DQS_n_BIBUF 
        (.IO(buffered_DDR_DQS_n[1]),
         .PAD(DDR_DQS_n[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk18[2].DDR_DQS_n_BIBUF 
        (.IO(buffered_DDR_DQS_n[2]),
         .PAD(DDR_DQS_n[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk18[3].DDR_DQS_n_BIBUF 
        (.IO(buffered_DDR_DQS_n[3]),
         .PAD(DDR_DQS_n[3]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk19[0].DDR_DQS_BIBUF 
        (.IO(buffered_DDR_DQS[0]),
         .PAD(DDR_DQS[0]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk19[1].DDR_DQS_BIBUF 
        (.IO(buffered_DDR_DQS[1]),
         .PAD(DDR_DQS[1]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk19[2].DDR_DQS_BIBUF 
        (.IO(buffered_DDR_DQS[2]),
         .PAD(DDR_DQS[2]));
-  (* box_type = "PRIMITIVE" *) 
+  (* BOX_TYPE = "PRIMITIVE" *) 
   BIBUF \genblk19[3].DDR_DQS_BIBUF 
        (.IO(buffered_DDR_DQS[3]),
         .PAD(DDR_DQS[3]));

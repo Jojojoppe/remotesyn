@@ -9,10 +9,10 @@ architecture behavioural of tb_heartbeat is
     -- COMPONENTS
     -- ----------
     component heartbeat is
-        generic (
-            Fin  : integer := 100000000;
-            Fout : integer := 8
-        );
+        -- generic (
+            -- Fin  : integer := 100000000;
+            -- Fout : integer := 8
+        -- );
         port (
             ACLK    : in std_logic;
             ARESETN : in std_logic;
@@ -25,10 +25,12 @@ architecture behavioural of tb_heartbeat is
     signal LED : std_logic_vector(1 downto 0) := "00";
     signal ARESETN : std_logic := '0';
 begin
-    c_heartbeat : component heartbeat generic map(
-        50000000,
-        5000000
-        ) port map(
+    c_heartbeat : component heartbeat 
+    -- generic map(
+    --     50000000,
+    --     5000000
+    -- ) 
+    port map(
         ACLK    => ACLK,
         ARESETN => ARESETN,
         LED     => LED

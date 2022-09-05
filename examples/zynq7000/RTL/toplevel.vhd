@@ -78,7 +78,7 @@ architecture structural of toplevel is
     component heartbeat is
         generic (
             Fin  : integer := 100000000;
-            Fout : integer := 8
+            Fout : integer := 10000000
         );
         port (
             ACLK    : in std_logic;
@@ -93,10 +93,12 @@ architecture structural of toplevel is
     signal FCLK_RESET0_N : std_logic;
     signal ARESETN : std_logic_vector(0 downto 0);
 begin
-    heartbeat_i : component heartbeat generic map(
-        100000000,
-        10
-        ) port map(
+    heartbeat_i : component heartbeat 
+    -- generic map(
+    --     100000000,
+    --     10
+    -- ) 
+    port map(
         ACLK    => FCLK_CLK0,
         ARESETN => ARESETN(0),
         LED     => LED

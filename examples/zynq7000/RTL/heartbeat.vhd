@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 entity heartbeat is
     generic (
         Fin  : integer := 100000000;
-        Fout : integer := 8
+        Fout : integer := 10000000
     );
     port (
         ACLK    : in std_logic;

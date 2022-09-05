@@ -11,3 +11,5 @@ def do(config, target, log, subprocesses, prefix='.'):
     if res != 0:
         print("ERROR: coregen returned with", res)
         return res
+
+    return 0

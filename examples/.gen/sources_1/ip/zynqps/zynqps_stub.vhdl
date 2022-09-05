@@ -1,7 +1,7 @@
 -- Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
--- Date        : Mon Sep  5 15:07:17 2022
+-- Date        : Mon Sep  5 16:39:19 2022
 -- Host        : NotSoStraightDPC running 64-bit Arch Linux
 -- Command     : write_vhdl -force -mode synth_stub
 --               /media/ssd/files/Projects/remotesyn/examples/.gen/sources_1/ip/zynqps/zynqps_stub.vhdl
@@ -46,7 +46,7 @@ attribute syn_black_box : boolean;
 attribute black_box_pad_pin : string;
 attribute syn_black_box of stub : architecture is true;
 attribute black_box_pad_pin of stub : architecture is "FCLK_CLK0,FCLK_RESET0_N,MIO[53:0],DDR_CAS_n,DDR_CKE,DDR_Clk_n,DDR_Clk,DDR_CS_n,DDR_DRSTB,DDR_ODT,DDR_RAS_n,DDR_WEB,DDR_BankAddr[2:0],DDR_Addr[14:0],DDR_VRN,DDR_VRP,DDR_DM[3:0],DDR_DQ[31:0],DDR_DQS_n[3:0],DDR_DQS[3:0],PS_SRSTB,PS_CLK,PS_PORB";
-attribute x_core_info : string;
-attribute x_core_info of stub : architecture is "processing_system7_v5_5_processing_system7,Vivado 2021.2";
+attribute X_CORE_INFO : string;
+attribute X_CORE_INFO of stub : architecture is "processing_system7_v5_5_processing_system7,Vivado 2021.2";
 begin
 end;

@@ -53,3 +53,5 @@ def do(config, target, log, subprocesses, prefix='.'):
     if res != 0:
         log("ERROR: trce returned with", res)
         return res
+
+    return 0

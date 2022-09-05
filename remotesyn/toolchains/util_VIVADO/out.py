@@ -9,7 +9,7 @@ def out(config, target, log, subprocesses, prefix='.'):
     package = config.get(f'target.{target}', 'package', fallback='')
     speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
-    netlist_top = config.get(f'target.{target}', 'netlist_top', fallback='toplevel')
+    netlist_top = config.get(f'target.{target}', 'netlist_top', fallback='toplevel').split()
     files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
     files_sysverilog = config.get(f'target.{target}', 'files_sysverilog', fallback='').split()
@@ -39,8 +39,8 @@ def out(config, target, log, subprocesses, prefix='.'):
         f.write(f"write_checkpoint -force {out_dir}/{target}.dcp\n")
         f.write(f"open_checkpoint {out_dir}/{target}.dcp\n")
         f.write(f"write_hw_platform -fixed -force -file {out_dir}/{target}.xsa\n")
-        f.write(f"write_verilog -force -mode timesim -cell {netlist_top} -rename_top {netlist_top} -sdf_anno true netlist.v\n") # -nolib
-        f.write(f"write_sdf -force -cell {netlist_top} -rename_top {netlist_top} -mode timesim netlist.sdf\n")
+        f.write(f"write_verilog -force -mode timesim -cell {netlist_top[0]} -rename_top {netlist_top[1]} -sdf_anno true -sdf_file impl_netlist.sdf impl_netlist.v\n") # -nolib
+        f.write(f"write_sdf -force -cell {netlist_top[0]} -rename_top {netlist_top[1]} -mode timesim impl_netlist.sdf\n")
 
     log(" - run vivado")
     p = subprocess.Popen(f"vivado -mode batch -source do.tcl", 
@@ -58,8 +58,8 @@ def out(config, target, log, subprocesses, prefix='.'):
         return res
     
     log(" - copy output files")
-    shutil.copy(f'{build_dir}/netlist.v', f'{out_dir}/impl_netlist.v')
-    shutil.copy(f'{build_dir}/netlist.sdf', f'{out_dir}/impl_netlist.sdf')
+    shutil.copy(f'{build_dir}/impl_netlist.v', f'{out_dir}/impl_netlist.v')
+    shutil.copy(f'{build_dir}/impl_netlist.sdf', f'{out_dir}/impl_netlist.sdf')
     shutil.copy(f'{build_dir}/timing.log', f'{out_dir}/timing.log')
     shutil.copy(f'{build_dir}/util.log', f'{out_dir}/util.log')
     shutil.copy(f'{build_dir}/power.log', f'{out_dir}/power.log')

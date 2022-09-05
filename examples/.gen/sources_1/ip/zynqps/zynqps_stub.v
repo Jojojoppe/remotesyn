@@ -1,7 +1,7 @@
 // Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2021.2 (lin64) Build 3367213 Tue Oct 19 02:47:39 MDT 2021
-// Date        : Mon Sep  5 15:07:17 2022
+// Date        : Mon Sep  5 16:39:19 2022
 // Host        : NotSoStraightDPC running 64-bit Arch Linux
 // Command     : write_verilog -force -mode synth_stub
 //               /media/ssd/files/Projects/remotesyn/examples/.gen/sources_1/ip/zynqps/zynqps_stub.v
@@ -13,7 +13,7 @@
 // This empty module with port declaration file causes synthesis tools to infer a black box for IP.
 // The synthesis directives are for Synopsys Synplify support to prevent IO buffer insertion.
 // Please paste the declaration into a Verilog source file or add the file as an additional source.
-(* x_core_info = "processing_system7_v5_5_processing_system7,Vivado 2021.2" *)
+(* X_CORE_INFO = "processing_system7_v5_5_processing_system7,Vivado 2021.2" *)
 module zynqps(FCLK_CLK0, FCLK_RESET0_N, MIO, DDR_CAS_n, 
   DDR_CKE, DDR_Clk_n, DDR_Clk, DDR_CS_n, DDR_DRSTB, DDR_ODT, DDR_RAS_n, DDR_WEB, DDR_BankAddr, 
   DDR_Addr, DDR_VRN, DDR_VRP, DDR_DM, DDR_DQ, DDR_DQS_n, DDR_DQS, PS_SRSTB, PS_CLK, PS_PORB)
