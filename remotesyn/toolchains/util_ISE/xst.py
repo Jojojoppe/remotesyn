@@ -10,8 +10,8 @@ def xst(config, target, log, subprocesses, prefix='.') -> int:
     speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
     xst_opts = config.get(f'target.{target}', 'xst_opts', fallback='')
-    files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split(' ')
-    files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split(' ')
+    files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
+    files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 

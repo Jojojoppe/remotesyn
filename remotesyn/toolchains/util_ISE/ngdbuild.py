@@ -9,7 +9,7 @@ def ngdbuild(config, target, log, subprocesses, prefix='.') -> int:
     package = config.get(f'target.{target}', 'package', fallback='')
     speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     ngdbuild_opts = config.get(f'target.{target}', 'ngdbuild_opts', fallback='')
-    files_con = config.get(f'target.{target}', 'files_con', fallback='').split(' ')
+    files_con = config.get(f'target.{target}', 'files_con', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
