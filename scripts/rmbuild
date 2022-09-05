@@ -64,6 +64,25 @@ def recv_file(channel, file):
             f.write(channel.recv(1024))
             fsize -= 1024
 
+def recv_dir(channel, dr):
+    cmd(b'ls'+sstr(dr), channel)
+    while True:
+        status = channel.recv(2)
+        if status != b'\x00\x00':
+            break
+    if status!=b'OK':
+        msg = channel.recv(1024)
+        print("Error:", bytes.decode(msg, 'ascii'))
+        exit(1)
+    ls = rstr(channel)
+    for p in ls.split('\n'):
+        tp = p[0]
+        name = p[1:]
+        if tp=='d':
+            recv_dir(channel, f'{dr}/{name}')
+        else:
+            recv_file(channel, f'{dr}/{name}')
+
 def print_help():
     print("Unified FPGA synthesizer frontend - remote execution\r\n(c) Joppe Blondel - 2022\r\n")
     print(f"Usage: {sys.argv[0]} [ OPTIONS ] action [ target ] ...")
@@ -71,29 +90,19 @@ def print_help():
     print("Options:")
     print("  -h                 Show this help message")
     print("  -c <file>          Configuration file, defaults to project.cfg")
-    print("")
-    print("Actions:")
-    print("ip <target>          Generate IP files from vendor provided libraries")
-    print("syn <target>         Synthesize design for target")
-    print("impl <target>        Route and place design for target")
-    print("bit <target>         Generate output files and run analysis for target")
-    print("all <target>         Generate IP, synthesize, route and place design for target")
-    print("floorplan <target>   Run floorplan editor, currently only for local execution")
-    print("sim <simtarget>      Run simulation target")
 
 if __name__=="__main__":
     # Parse arguments
     i = 1
     nextarg = None
     configpath = 'project.cfg'
-    actions = []
+    target = ''
     while i<len(sys.argv):
         if nextarg is not None:
             if nextarg=='config':
                 configpath = sys.argv[i]
                 nextarg = None
             else:
-                actions.append((nextarg, sys.argv[i]))
                 nextarg = None
         elif sys.argv[i]=='-h':
             print_help()
@@ -101,7 +110,7 @@ if __name__=="__main__":
         elif sys.argv[i]=='-c':
             nextarg = 'config'
         else:
-            nextarg = sys.argv[i]
+            target = sys.argv[i]
         i += 1
     if nextarg is not None:
         print("ERROR: expected more arguments")
@@ -140,42 +149,32 @@ if __name__=="__main__":
     subprocesses = []
 
     try:
-        for action in actions:
-            target = action[1]
-            action = action[0]
 
-            if not config.has_section(f'build:{target}'):
-                print("ERROR: config file has no build section for target")
-                exit(1)
-            devtarget = f'target:{config.get(f"build:{target}", "target", fallback="")}'
-            if not config.has_section(devtarget):
-                print("ERROR: config file has no section for device target")
-                exit(1)
-            toolchain = config.get(devtarget, 'toolchain', fallback="NONE")
-            if toolchain=="NONE":
-                print("ERROR: no toolchain specified for device target")
-                exit(1)
-            
-            try:
-                exec(f"from remotesyn.{toolchain}.{action} import do, needed_files, generated_files")
-            except ImportError:
-                print(f"ERROR: Unknown action '{action}' for toolchain '{toolchain}'")
-                exit(1)
+        toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
+        if toolchain=='NONE':
+            print("ERROR: No toolchain specified for target")
+            exit(1)
+        
+        try:
+            exec(f"from remotesyn.toolchains.{toolchain} import do")
+        except ImportError:
+            print(f"ERROR: Unknown toolchain '{toolchain}'")
+            exit(1)
 
-            # Send needed files
-            for f in needed_files(config, target):
-                send_file(channel, f)
+        # Send all files
+        for it in config.items(f"target.{target}"):
+            if it[0].startswith('files_'):
+                for f in it[1].split():
+                    send_file(channel, f)
 
-            # ret = do(config, target, print, subprocesses)
-            cmd(b'do'+sstr(f"{action} {target}"), channel)
-            ret = 0
+        cmd(b'do'+sstr(target), channel)
+        ret = 0
 
-            # Get generated files
-            for f in generated_files(config, target):
-                recv_file(channel, f)
+        # Receive output dir
+        recv_dir(channel, config.get('project', 'out_dir', fallback='out'))
 
-            if ret!=0:
-                exit(ret)
+        if ret!=0:
+            exit(ret)
 
     except paramiko.ssh_exception.SSHException as e:
         print("ERROR: Connection error...")

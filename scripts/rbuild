@@ -5,34 +5,24 @@ import sys
 
 def print_help():
     print("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
-    print(f"Usage: {sys.argv[0]} [ OPTIONS ] action [ target ] ...")
+    print(f"Usage: {sys.argv[0]} [ OPTIONS ] target")
     print("")
     print("Options:")
     print("  -h                 Show this help message")
     print("  -c <file>          Configuration file, defaults to project.cfg")
-    print("")
-    print("Actions:")
-    print("ip <target>          Generate IP files from vendor provided libraries")
-    print("syn <target>         Synthesize design for target")
-    print("impl <target>        Route and place design for target")
-    print("bit <target>         Generate output files and run analysis for target")
-    print("all <target>         Generate IP, synthesize, route and place design for target")
-    print("floorplan <target>   Run floorplan editor, currently only for local execution")
-    print("sim <simtarget>      Run simulation target")
 
 if __name__=="__main__":
     # Parse arguments
     i = 1
     nextarg = None
     configpath = 'project.cfg'
-    actions = []
+    target = ''
     while i<len(sys.argv):
         if nextarg is not None:
             if nextarg=='config':
                 configpath = sys.argv[i]
                 nextarg = None
             else:
-                actions.append((nextarg, sys.argv[i]))
                 nextarg = None
         elif sys.argv[i]=='-h':
             print_help()
@@ -40,7 +30,7 @@ if __name__=="__main__":
         elif sys.argv[i]=='-c':
             nextarg = 'config'
         else:
-            nextarg = sys.argv[i]
+            target = sys.argv[i]
         i += 1
     if nextarg is not None:
         print("ERROR: expected more arguments")
@@ -52,32 +42,22 @@ if __name__=="__main__":
     subprocesses = []
 
     try:
-        for action in actions:
-            target = action[1]
-            action = action[0]
 
-            if not config.has_section(f'build:{target}'):
-                print("ERROR: config file has no build section for target")
-                exit(1)
-            devtarget = f'target:{config.get(f"build:{target}", "target", fallback="")}'
-            if not config.has_section(devtarget):
-                print("ERROR: config file has no section for device target")
-                exit(1)
-            toolchain = config.get(devtarget, 'toolchain', fallback="NONE")
-            if toolchain=="NONE":
-                print("ERROR: no toolchain specified for device target")
-                exit(1)
-            
-            try:
-                exec(f"from remotesyn.{toolchain}.{action} import do")
-            except ImportError:
-                print(f"ERROR: Unknown action '{action}' for toolchain '{toolchain}'")
-                exit(1)
+        toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
+        if toolchain=='NONE':
+            print("ERROR: No toolchain specified for target")
+            exit(1)
+        
+        try:
+            exec(f"from remotesyn.toolchains.{toolchain} import do")
+        except ImportError:
+            print(f"ERROR: Unknown toolchain '{toolchain}'")
+            exit(1)
 
-            ret = do(config, target, print, subprocesses)
+        ret = do(config, target, print, subprocesses)
 
-            if ret!=0:
-                exit(ret)
+        if ret!=0:
+            exit(ret)
 
     except KeyboardInterrupt:
         print("\rStopping rbuild")
