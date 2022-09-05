@@ -3,13 +3,17 @@
 import configparser
 import sys
 
+def log(*args):
+    print(*args)
+    sys.stdout.flush()
+
 def print_help():
-    print("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
-    print(f"Usage: {sys.argv[0]} [ OPTIONS ] target ...")
-    print("")
-    print("Options:")
-    print("  -h                 Show this help message")
-    print("  -c <file>          Configuration file, defaults to project.cfg")
+    log("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
+    log(f"Usage: {sys.argv[0]} [ OPTIONS ] target ...")
+    log("")
+    log("Options:")
+    log("  -h                 Show this help message")
+    log("  -c <file>          Configuration file, defaults to project.cfg")
 
 if __name__=="__main__":
     # Parse arguments
@@ -33,7 +37,7 @@ if __name__=="__main__":
             targets.append(sys.argv[i])
         i += 1
     if nextarg is not None:
-        print("ERROR: expected more arguments")
+        log("ERROR: expected more arguments")
         exit(1)
 
     config = configparser.ConfigParser()
@@ -45,27 +49,27 @@ if __name__=="__main__":
 
         for target in targets:
 
-            print("Target", target)
+            log("Target", target)
 
             toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
             if toolchain=='NONE':
-                print("ERROR: No toolchain specified for target")
+                log("ERROR: No toolchain specified for target")
                 exit(1)
             
             try:
                 exec(f"from remotesyn.toolchains.{toolchain} import do")
             except ImportError:
-                print(f"ERROR: Unknown toolchain '{toolchain}'")
+                log(f"ERROR: Unknown toolchain '{toolchain}'")
                 exit(1)
 
-            ret = do(config, target, print, subprocesses)
+            ret = do(config, target, log, subprocesses)
 
             if ret!=0:
-                print("ERROR: toolchain returned with", ret)
+                log("ERROR: toolchain returned with", ret)
                 exit(ret)
 
     except KeyboardInterrupt:
-        print("\rStopping rbuild")
+        log("\rStopping rbuild")
         for p in subprocesses:
             p.kill()
         exit(0)

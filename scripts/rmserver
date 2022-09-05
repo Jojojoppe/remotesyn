@@ -14,6 +14,7 @@ import json
 import threading
 import socket
 import shutil
+import fcntl
 
 # List of running threads
 threads = []
@@ -66,6 +67,23 @@ class FileTransferRF(threading.Thread):
                 fdata = f.read(1024)
                 self.channel.sendall(fdata)
                 i -= 1024
+
+class DoLogger(threading.Thread):
+    def __init__(self, channel, p, identifier):
+        threading.Thread.__init__(self)
+        self.channel = channel
+        self.p = p
+        self.identifier = identifier
+        self.running = True
+    def stop(self):
+        self.running = False
+    def run(self):
+        while self.p.poll() is None:
+            d = os.read(self.p.stdout.fileno(), 1024)
+            self.channel.sendall(d)
+        res = self.p.wait()
+        self.channel.sendall(b'\x00\xff\00')
+        self.channel.sendall(struct.pack('>I', res))
 
 class SSHServer(paramiko.ServerInterface):
     def __init__(self, authorized):
@@ -176,10 +194,15 @@ class SSHServer(paramiko.ServerInterface):
                 print('[]', args)
                 with open(f"{self.identifier}/project.cfg", "w") as f:
                     self.config.write(f)
-                p = subprocess.Popen(f"rbuild -c project.cfg {args}", shell=True, cwd=f'{self.identifier}', stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                p = subprocess.Popen(f"rbuild -c project.cfg {args}", shell=True, cwd=f'{self.identifier}', stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
                 self.subprocesses.append(p)
-                res = p.wait()
-                channel.sendall(struct.pack('>I', res))
+
+                t = DoLogger(channel, p, self.identifier)
+                self.threads.append(t)
+                t.start()
+
+                channel.sendall(b'OK')
+
 
             return True
 

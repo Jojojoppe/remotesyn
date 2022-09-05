@@ -65,6 +65,7 @@ def recv_file(channel, file):
             fsize -= 1024
 
 def recv_dir(channel, dr):
+    print("<<<", dr)
     cmd(b'ls'+sstr(dr), channel)
     while True:
         status = channel.recv(2)
@@ -79,6 +80,8 @@ def recv_dir(channel, dr):
         tp = p[0]
         name = p[1:]
         if tp=='d':
+            if name.startswith('.'):
+                continue
             recv_dir(channel, f'{dr}/{name}')
         else:
             recv_file(channel, f'{dr}/{name}')
@@ -171,6 +174,16 @@ if __name__=="__main__":
                         send_file(channel, f)
 
             cmd(b'do'+sstr(target), channel)
+            status = channel.recv(2)
+            end = -1
+            while end<0:
+                data = channel.recv(8)
+                end = data.find(b'\x00\xff\x00')
+                if end>=0:
+                    data = data[0:end]
+                print(str(data, 'utf-8'), end='', flush=True)
+                sys.stdout.flush()
+
             ret = 0
 
             # Receive output dir
