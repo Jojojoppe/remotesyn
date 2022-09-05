@@ -4,6 +4,10 @@ import time
 import subprocess
 
 def do(config, target, log, subprocesses, prefix='.'):
+    shutil.rmtree(config.get('project', 'build_dir', fallback='build'), True)
+
+    log("Starting simulation")
+    
     log(" - parsing options")
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
     vcdlevels = config.get(f'target.{target}', 'vcdlevels', fallback='1')
