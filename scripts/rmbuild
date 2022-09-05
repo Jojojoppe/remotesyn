@@ -141,14 +141,13 @@ if __name__=="__main__":
         print("ERROR: Could not connect to server")
         exit(1)
 
-    # Send project identification
-    cmd(b'id' + struct.pack('>q', hash(host_key.get_base64())), channel)
-    # Send config
-    cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
-
     subprocesses = []
 
     try:
+        # Send project identification
+        cmd(b'id' + struct.pack('>q', hash(host_key.get_base64())), channel)
+        # Send config
+        cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
 
         toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
         if toolchain=='NONE':
@@ -177,7 +176,7 @@ if __name__=="__main__":
             exit(ret)
 
     except paramiko.ssh_exception.SSHException as e:
-        print("ERROR: Connection error...")
+        print("ERROR: Connection error...", e)
         for p in subprocesses:
             p.kill()
         exit(0)

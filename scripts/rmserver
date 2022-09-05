@@ -183,10 +183,10 @@ class SSHServer(paramiko.ServerInterface):
 
             return True
 
-        except Exception:
+        except Exception as e:
             global running
             if running:
-                print("ERROR: Unknown error")
+                print("ERROR: Unknown error:", e)
             return False
 
 class Connection(threading.Thread):

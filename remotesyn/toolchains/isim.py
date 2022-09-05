@@ -19,8 +19,8 @@ def do(config, target, log, subprocesses, prefix='.'):
     build_dir = f'{prefix}/{build_dir}'
     out_dir = f'{prefix}/{out_dir}/{target}'
 
-    fuse_opts = fuse_opts.replace("%D%", prefix)
-    isim_opts = isim_opts.replace("%D%", prefix)
+    fuse_opts = fuse_opts.replace("~D~", prefix)
+    isim_opts = isim_opts.replace("~D~", prefix)
 
     log(" - creating output directories")
     os.makedirs(build_dir, exist_ok=True)
