@@ -1,3 +1,4 @@
+from distutils.command.build import build
 import shutil
 import os
 import time
@@ -51,7 +52,9 @@ def do(config, target, log, subprocesses, prefix='.'):
 
         if res==0:
             log(" - copy output files")
-            shutil.copytree(f'{build_dir}/.gen/sources_1/ip/{cname}', f'{out_dir}/{cname}')
+            shutil.rmtree(f'{out_dir}/{cname}', True)
+            shutil.copytree(f'{build_dir}/.gen/sources_1/ip/{cname}', f'{out_dir}/{cname}', dirs_exist_ok=True)
+            shutil.copy(f'{build_dir}/.srcs/sources_1/ip/{cname}/{cname}.xci', f'{out_dir}/{cname}/{cname}.xci')
         else:
             log("ERROR: vivado returned with:", res)
             return res
