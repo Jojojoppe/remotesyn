@@ -6,7 +6,11 @@ from .util_ISE.netgen import netgen
 from .util_ISE.bitgen import bitgen
 from .util_ISE.trce import trce
 
+import shutil
+
 def do(config, target, log, subprocesses, prefix='.'):
+    shutil.rmtree(config.get('project', 'build_dir', fallback='build'), True)
+
     log("Syntesize:")
 
     res = xst(config, target, log, subprocesses, prefix)
