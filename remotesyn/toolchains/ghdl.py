@@ -39,7 +39,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     log(" - analyze files")
     res = 0
     for f in files_vhdl:
-        res = execp(f"echo +++{f} >> a.log && ghdl -a {ghdla_opts} {prefix}/{f} 2>&1 >> a.log", subprocesses, build_dir)
+        res = execp(f"echo +++{f} >> a.log && ghdl -a {ghdla_opts} {prefix}/{f} 2>> a.log", subprocesses, build_dir)
         if res!=0:
             break
     log(" - copy logs")
@@ -49,7 +49,7 @@ def do(config, target, log, subprocesses, prefix='.'):
         return res
 
     log(" - elaborate")
-    res = execp(f"echo {toplevel} >> e.log && ghdl -e {ghdle_opts} {toplevel} 2>&1 >> e.log", subprocesses, build_dir)
+    res = execp(f"echo {toplevel} >> e.log && ghdl -e {ghdle_opts} {toplevel} 2>> e.log", subprocesses, build_dir)
     log(" - copy logs")
     shutil.copy(f'{build_dir}/e.log', f'{out_dir}/e.log')
     if res!=0:
@@ -60,7 +60,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     extra = ''
     if runtime!='all':
         extra = f'--stop-time={runtime.replace(" ", "")}'
-    res = execp(f"echo {toplevel} >> r.log && ghdl -r {ghdlr_opts} {extra} {toplevel} --vcd=out.vcd 2>&1 >> r.log", subprocesses, build_dir)
+    res = execp(f"echo {toplevel} >> r.log && ghdl -r {ghdlr_opts} {extra} {toplevel} --vcd=out.vcd 2>&1 1>> r.log", subprocesses, build_dir)
     log(" - copy logs")
     shutil.copy(f'{build_dir}/r.log', f'{out_dir}/r.log')
     # Ignore simulation errors: vhdl stopping with failure results in returned with 1
