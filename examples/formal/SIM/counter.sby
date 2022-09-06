@@ -1,0 +1,22 @@
+[tasks]
+bmc d_12
+cover d_120
+prove d_4
+
+[options]
+bmc:mode bmc
+cover:mode cover
+prove:mode prove
+d_120:depth 120
+d_12:depth 12
+d_4:depth 4
+
+[engines]
+smtbmc
+
+[script]
+ghdl -fpsl --std=08 -gformal=true counter.vhd -e counter
+prep -top counter
+
+[files]
+RTL/counter.vhd

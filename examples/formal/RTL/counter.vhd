@@ -24,12 +24,23 @@ begin
 
     cnt <= std_logic_vector(icnt);
 
-    process(ACLK, ARESETN)
+    f_counter : if formal generate
+    begin
+        -- Set clock source for all assertions
+        default clock is rising_edge(ACLK);
+        -- Counter is always under mxcnt if it started under max
+        a_never_exceeds_max : assert (always (icnt<mxcnt) -> always (icnt<mxcnt));
+        -- Counter is always reset to 0
+        a_counter_reset_to_zero : assert (always (ARESETN='0') -> (icnt=0));
+    end generate;
+
+    p_counter : process(ACLK, ARESETN)
     begin
         if ARESETN='0' then
             icnt <= (others=>'0');
         elsif rising_edge(ACLK) then
-            if icnt<mxcnt then
+            -- Without this -1 the assertion wont hold
+            if icnt<mxcnt-1 then
                 icnt <= icnt + 1;
             else 
                 icnt <= (others=>'0');
