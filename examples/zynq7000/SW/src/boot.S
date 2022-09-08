@@ -75,6 +75,15 @@ _start:
     ldr sp, =__proc0_svc_stack                              /* load SVC mode stack pointer */
     /* We are now in SVC mode */
 
+    // Disable L1 cache
+    mov		r0, #0
+    mcr		p15, 0, r0, c7, c7, 0	// Invalidate cache
+    mcr		p15, 0, r0, c8, c7, 0	// Invalidate tlb
+    mrc 	p15, 0, r0, c1, c0, 0
+    bic		r0, r0, #0x1000
+    bic		r0, r0, #0x0004
+    mcr		p15, 0, r0, c1, c0, 0
+
 	/* Set vector table base address */
     ldr r0, =vectortable
     mcr p15, #0, r0, c12, c0, #0

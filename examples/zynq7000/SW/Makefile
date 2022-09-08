@@ -2,9 +2,10 @@
 
 TARGET				:= app.elf
 
+BUILDROOT			?= $(shell pwd)
 BUILDDIR			:= build
 
-SRCDIRS				:= src
+SRCDIRS				:= $(BUILDROOT)/src
 SRCFILESC			:= $(shell find $(SRCDIRS) -type f -name "*.c") 
 OBJFILESC			:= $(SRCFILESC:%.c=$(BUILDDIR)/%.c.o) $(BUILDDIR)/src/ps7_init.o
 DEPFILESC			:= $(SRCFILESC:%.c=$(BUILDDIR)/%.c.d)
@@ -25,8 +26,8 @@ LD					:= $(CROSS_COMPILE)gcc
 CC_WARNING			:= -Wall -Wextra
 CC_LIBS				:= -lgcc
 CC_FLAGS			:= -nostdlib -fno-builtin -g -mcpu=cortex-a9
-CC_INCLUDES			:= -I src -I ../OUT/ip/zynqps
-LD_FLAGS			:= -Wl,-Tlinker.ld
+CC_INCLUDES			:= -I $(BUILDROOT)/src -I $(BUILDROOT)/../OUT/ip/zynqps
+LD_FLAGS			:= -Wl,-T$(BUILDROOT)/linker.ld
 
 .PHONY: $(TARGET) all clean
 all: $(TARGET)
@@ -48,10 +49,10 @@ $(BUILDDIR)/$(TARGET): $(OBJFILES)
 	$(LD) $(CC_FLAGS) $(LD_FLAGS) -o $(BUILDDIR)/$(TARGET) $(OBJFILES) $(CC_LIBS)
 	$(XILINX_BASE)/bin/$(CROSS_COMPILE)objdump -D $(BUILDDIR)/$(TARGET) > DISASS
 
-$(BUILDDIR)/src/ps7_init.o : ../OUT/ip/zynqps/ps7_init.c ../OUT/ip/zynqps/ps7_init.h
+$(BUILDDIR)/src/ps7_init.o : $(BUILDROOT)/../OUT/ip/zynqps/ps7_init.c $(BUILDROOT)/../OUT/ip/zynqps/ps7_init.h
 	echo 'CC ' $@
 	-mkdir -p $(shell dirname $@)
-	$(CC) $(CC_FLAGS) $(CC_WARNING) $(CC_INCLUDES) -MD -o $(BUILDDIR)/src/ps7_init.o -c ../OUT/ip/zynqps/ps7_init.c
+	$(CC) $(CC_FLAGS) $(CC_WARNING) $(CC_INCLUDES) -MD -o $(BUILDDIR)/src/ps7_init.o -c $(BUILDROOT)/../OUT/ip/zynqps/ps7_init.c
 
 $(OBJFILES): $(BUILDDIR)/%.c.o: %.c
 	echo 'CC ' $@
