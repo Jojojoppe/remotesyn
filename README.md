@@ -8,6 +8,9 @@ Remotesyn is a tool which proves a general abstraction for HDL/FPGA toolchains s
 + Xilinx VIVADO synthesis and bitstream generation [`VIVADO`] 
 + Xilinx Vivado IP core generation [`VIVADO-IP`] 
 + Xilinx xsim (Vivado) simulation (pre and post synthesis) [`xsim`] 
++ Makefile build [`make`]
++ QEMU simulation (nographic mode) [`qemu`]
++ QuestaSim simulation [`questa`]
 
 The HDL project is configured with a config file (in ini format) and should provide execution targets specified by a `[target.<target_name>]` tag with a toolchain setting (see the example directory for examples). 
 
