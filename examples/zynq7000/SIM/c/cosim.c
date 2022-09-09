@@ -40,7 +40,7 @@ int start_cosim(char * descr){
 
 void end_cosim(){
     close(fd);
-	fclose(log);
+	// fclose(log);
 }
 
 int wait_cosim(uint32_t * retaddr, uint32_t * time){
