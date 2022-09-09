@@ -26,9 +26,9 @@ def do(config, target, log, subprocesses, prefix='.'):
     os.makedirs(out_dir, exist_ok=True)
 
     log(" - run QEMU, quit r(m)build to stop")
-    p = subprocess.Popen(f"qemu-system-{arch} -machine {machine} -kernel {prefix}/{files_executable} {extra_opts} -m {ram} -nographic | tee run.log", 
+    p = subprocess.Popen(f"qemu-system-{arch} -machine {machine} -kernel {prefix}/{files_executable} {extra_opts} -m {ram} -nographic 2>error.log | tee run.log", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL)
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)
@@ -36,5 +36,6 @@ def do(config, target, log, subprocesses, prefix='.'):
     
     log(" - copy logs")
     shutil.copy(f'{build_dir}/run.log', f'{out_dir}/run.log')
+    shutil.copy(f'{build_dir}/error.log', f'{out_dir}/error.log')
 
     return 0

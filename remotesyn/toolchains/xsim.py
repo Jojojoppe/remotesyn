@@ -16,6 +16,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
     files_sysverilog = config.get(f'target.{target}', 'files_sysverilog', fallback='').split()
     files_xci = config.get(f'target.{target}', 'files_xci', fallback='').split()
+    files_c = config.get(f'target.{target}', 'files_c', fallback='').split()
     files_other = config.get(f'target.{target}', 'files_other', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
@@ -48,7 +49,9 @@ def do(config, target, log, subprocesses, prefix='.'):
         for s in files_other:
             f.write(f"add_files -norecurse -scan_for_includes \"{prefix}/{s}\"\n")
             f.write(f"import_files -norecurse \"{prefix}/{s}\"\n")
-        # TODO C files for VPI
+        for s in files_c:
+            f.write(f"add_files -norecurse -scan_for_includes \"{prefix}/{s}\"\n")
+            f.write(f"import_files -norecurse \"{prefix}/{s}\"\n")
 
         f.write(f"set_property top {toplevel} [get_filesets sim_1]\n")
         f.write("set_property top_lib xil_defaultlib [get_filesets sim_1]\n")
@@ -106,7 +109,7 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     log(" - compile")
 
-    p = subprocess.Popen(f'bash compile.sh', 
+    p = subprocess.Popen(f'bash compile.sh 2>&1 | tee comp.log', 
         shell=True, cwd=f'{build_dir}/sim/sim.sim/sim_1/behav/xsim', 
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocesses.append(p)
@@ -115,7 +118,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     res = p.returncode
 
     log(" - copy logs")
-    shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/compile.log', f'{out_dir}/compile.log')
+    shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/comp.log', f'{out_dir}/compile.log')
 
     if res!=0:
         log("ERROR: compile returned with", res)
@@ -123,7 +126,7 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     log(" - elaborate")
 
-    p = subprocess.Popen(f'bash elaborate.sh', 
+    p = subprocess.Popen(f'bash elaborate.sh 2>&1 | tee elab.log', 
         shell=True, cwd=f'{build_dir}/sim/sim.sim/sim_1/behav/xsim', 
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocesses.append(p)
@@ -132,7 +135,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     res = p.returncode
 
     log(" - copy logs")
-    shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/elaborate.log', f'{out_dir}/elaborate.log')
+    shutil.copy(f'{build_dir}/sim/sim.sim/sim_1/behav/xsim/elab.log', f'{out_dir}/elaborate.log')
 
     if res!=0:
         log("ERROR: elaborate returned with", res)
@@ -144,7 +147,7 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     log(" - simulate")
 
-    p = subprocess.Popen(f'bash simulate.sh', 
+    p = subprocess.Popen(f'bash simulate.sh 2>&1 | tee simulate.log', 
         shell=True, cwd=f'{build_dir}/sim/sim.sim/sim_1/behav/xsim', 
         stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     subprocesses.append(p)
