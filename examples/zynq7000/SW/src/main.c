@@ -6,7 +6,7 @@
 void main(){
     cpu_disable_interrups();
     // Initialize ZYNQ Processing System
-    ps7_init();
+    // ps7_init();
     // Start UART
     uart_setup();
 

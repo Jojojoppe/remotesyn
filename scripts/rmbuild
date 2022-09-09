@@ -7,6 +7,7 @@ import base64
 import struct
 import os
 import json
+import signal
 
 def cmd(cmd, channel):
     channel.exec_command(base64.encodebytes(cmd))
@@ -145,6 +146,19 @@ if __name__=="__main__":
         exit(1)
 
     subprocesses = []
+    stopped = False
+
+    def sighandler(num, frame):
+        global stopped
+        if num==signal.SIGINT:
+            print("\rStopping rbuild")
+            stopped = True
+            for p in subprocesses:
+                p.terminate()
+            exit(0)
+
+    signal.signal(signal.SIGINT, sighandler)
+    signal.signal(signal.SIGALRM, sighandler)
 
     try:
         # Send project identification
@@ -153,6 +167,8 @@ if __name__=="__main__":
         cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
 
         for target in targets:
+            if stopped:
+                break
             
             print("Target", target)
 
@@ -193,14 +209,10 @@ if __name__=="__main__":
                 print("ERROR: toolchain returned with", ret)
                 exit(ret)
 
+        cmd(b'ex', channel)
+
     except paramiko.ssh_exception.SSHException as e:
         print("ERROR: Connection error...", e)
-        for p in subprocesses:
-            p.kill()
-        exit(0)
-
-    except KeyboardInterrupt:
-        print("\rStopping rmbuild")
         for p in subprocesses:
             p.kill()
         exit(0)

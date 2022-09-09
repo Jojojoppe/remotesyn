@@ -100,7 +100,6 @@ class SSHServer(paramiko.ServerInterface):
         for t in self.threads:
             if type(t) is not NoneType:
                 t.stop()
-                t.join()
 
     def check_channel_request(self, kind, chanid):
         if kind == 'session':
@@ -143,7 +142,7 @@ class SSHServer(paramiko.ServerInterface):
             # Exit
             elif cmd==b'ex':
                 print('<', self.identifier)
-                self.event.set()
+                self.stop()
 
             # Config
             elif cmd==b'cf':
@@ -245,9 +244,10 @@ class Connection(threading.Thread):
             time.sleep(0.2)
         else:
             print("Connection", self.addr, "closed")
-        if server.identifier!='':
-            pass
-            shutil.rmtree(server.identifier, True)
+
+        print("Deleting directory")
+        shutil.rmtree(server.identifier, True)
+
         transport.close()
 
 def print_help():

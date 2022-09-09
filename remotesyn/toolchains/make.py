@@ -6,7 +6,7 @@ import subprocess
 def do(config, target, log, subprocesses, prefix='.'):
     shutil.rmtree(config.get('project', 'build_dir', fallback='build'), True)
 
-    log("Starting gcc-make build process")
+    log("Starting make build process")
     
     log(" - parsing options")
     files_makefile = config.get(f'target.{target}', 'files_makefile', fallback='')

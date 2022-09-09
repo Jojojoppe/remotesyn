@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 
 import configparser
+from re import sub
 import sys
+import signal
 
 def log(*args):
     print(*args)
     sys.stdout.flush()
+
 
 def print_help():
     log("Unified FPGA synthesizer frontend\r\n(c) Joppe Blondel - 2022\r\n")
@@ -45,31 +48,38 @@ if __name__=="__main__":
 
     subprocesses = []
 
-    try:
+    def sighandler(num, frame):
+        if num==signal.SIGINT:
+            log("\rStopping rbuild")
+            for p in subprocesses:
+                p.terminate()
+            signal.alarm(4)
+        elif num==signal.SIGALRM:
+            log("Force killing subprocesses")
+            for p in subprocesses:
+                p.kill()
+            exit(0)
 
-        for target in targets:
+    signal.signal(signal.SIGINT, sighandler)
+    signal.signal(signal.SIGALRM, sighandler)
 
-            log("Target", target)
+    for target in targets:
 
-            toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
-            if toolchain=='NONE':
-                log("ERROR: No toolchain specified for target")
-                exit(1)
-            
-            try:
-                exec(f"from remotesyn.toolchains.{toolchain} import do")
-            except ImportError:
-                log(f"ERROR: Unknown toolchain '{toolchain}'")
-                exit(1)
+        log("Target", target)
 
-            ret = do(config, target, log, subprocesses)
+        toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
+        if toolchain=='NONE':
+            log("ERROR: No toolchain specified for target")
+            exit(1)
+        
+        try:
+            exec(f"from remotesyn.toolchains.{toolchain} import do")
+        except ImportError:
+            log(f"ERROR: Unknown toolchain '{toolchain}'")
+            exit(1)
 
-            if ret!=0:
-                log("ERROR: toolchain returned with", ret)
-                exit(ret)
+        ret = do(config, target, log, subprocesses)
 
-    except KeyboardInterrupt:
-        log("\rStopping rbuild")
-        for p in subprocesses:
-            p.kill()
-        exit(0)
+        if ret!=0:
+            log("ERROR: toolchain returned with", ret)
+            exit(ret)
