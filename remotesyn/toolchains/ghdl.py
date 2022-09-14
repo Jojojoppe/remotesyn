@@ -25,6 +25,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     ghdle_opts = config.get(f'target.{target}', 'ghdle_opts', fallback='')
     ghdlr_opts = config.get(f'target.{target}', 'ghdlr_opts', fallback='')
     files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
+    files_other = config.get(f'target.{target}', 'files_other', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
@@ -35,6 +36,12 @@ def do(config, target, log, subprocesses, prefix='.'):
     log(" - creating output directories")
     os.makedirs(build_dir, exist_ok=True)
     os.makedirs(out_dir, exist_ok=True)
+
+    log(" - copy needed files")
+    for f in files_other:
+        d = os.path.dirname(f)
+        os.makedirs(f"{build_dir}/{d}", exist_ok=True)
+        shutil.copy(f"{prefix}/{f}", f"{build_dir}/{f}")
 
     log(" - analyze files")
     res = 0

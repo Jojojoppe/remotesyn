@@ -47,7 +47,7 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     log(" - writing do file")
     with open(f'{build_dir}/do.do', 'w') as f:
-        f.write("vcd file out.vcd\n vcd add *\nrun -all\nquit\n");
+        f.write("vcd file out.vcd\n vcd add -r -in -out -inout -internal -ports *\nrun -all\nquit\n");
 
     log(" - run vsim")
     p = subprocess.Popen(f"bash ./do.sh 2>&1 | tee do.log", 

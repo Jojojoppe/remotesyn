@@ -6,7 +6,9 @@ import subprocess
 def execp(cmd, subprocesses, cwd):
     p = subprocess.Popen(cmd, 
         shell=True, cwd=cwd, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL, 
+        stderr=subprocess.DEVNULL)
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)
@@ -55,7 +57,10 @@ def do(config, target, log, subprocesses, prefix='.'):
         for d in os.listdir(f'{build_dir}'):
             if os.path.isdir(f'{build_dir}/{d}') and d.startswith(oname):
                 shutil.copy(f'{build_dir}/{d}/logfile.txt', f'{out_dir}/{d}.log')
-                shutil.copytree(f'{build_dir}/{d}/engine_0', f'{out_dir}/{d}', dirs_exist_ok=True)
+                try:
+                    shutil.copytree(f'{build_dir}/{d}/engine_0', f'{out_dir}/{d}', dirs_exist_ok=True)
+                except FileNotFoundError:
+                    pass
 
         if res!=0:
             log(" - [-]")

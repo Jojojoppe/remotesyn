@@ -11,11 +11,16 @@ import shutil
 def do(config, target, log, subprocesses, prefix='.'):
     shutil.rmtree(config.get('project', 'build_dir', fallback='build'), True)
 
+    justsynth = config.getboolean(f'target.{target}', 'justsynth', fallback=False)
+
     log("Syntesize:")
 
     res = xst(config, target, log, subprocesses, prefix)
     if res != 0:
         log("ERROR: xst returned with", res)
+        return res
+
+    if justsynth:
         return res
 
     log("Implement")
