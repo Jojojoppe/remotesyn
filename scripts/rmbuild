@@ -69,9 +69,10 @@ def recv_dir(channel, dr):
     print("<<<", dr)
     cmd(b'ls'+sstr(dr), channel)
     while True:
-        status = channel.recv(2)
-        if status != b'\x00\x00':
+        status = channel.recv(1)
+        if status != b'\x00':
             break
+    status += channel.recv(1)
     if status!=b'OK':
         msg = channel.recv(1024)
         print("Error:", bytes.decode(msg, 'ascii'))
@@ -170,7 +171,7 @@ if __name__=="__main__":
             # Send config
             cmd(b'cf' + sstr(json.dumps({s:dict(config.items(s)) for s in config.sections()})), channel)
             
-            print("Target", target)
+            print("LOCAL: Target", target)
 
             toolchain = config.get(f'target.{target}', 'toolchain', fallback='NONE')
             if toolchain=='NONE':
@@ -190,7 +191,11 @@ if __name__=="__main__":
                         send_file(channel, f)
 
             cmd(b'do'+sstr(target), channel)
-            status = channel.recv(2)
+            while True:
+                status = channel.recv(1)
+                if status!='b\x00':
+                    break
+            status += channel.recv(1)
             end = -1
             while end<0:
                 data = channel.recv(8)
@@ -200,7 +205,7 @@ if __name__=="__main__":
                 print(str(data, 'utf-8'), end='', flush=True)
                 sys.stdout.flush()
 
-            ret = 0
+            ret = int.from_bytes(channel.recv(4), 'big')
 
             # Receive output dir
             recv_dir(channel, config.get('project', 'out_dir', fallback='out'))
