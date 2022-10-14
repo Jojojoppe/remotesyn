@@ -28,5 +28,6 @@ def trce(config, target, log, subprocesses, prefix='.') -> int:
 
     log(" - copy logs")
     shutil.copy(f'{build_dir}/{target}.twr', f'{out_dir}/timing.log')
+    shutil.copy(f'{build_dir}/{target}.twx', f'{out_dir}/timing.twx')
 
     return res

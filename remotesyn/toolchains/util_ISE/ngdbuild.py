@@ -25,7 +25,10 @@ def ngdbuild(config, target, log, subprocesses, prefix='.') -> int:
     log(" - run ngdbuild")
     p = subprocess.Popen(f"ngdbuild -intstyle xflow -p {devstring} -uc {prefix}/{files_con[0]} {ngdbuild_opts} {out_dir}/{target}.ngc impl.ngd", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL, 
+        # stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)

@@ -29,7 +29,10 @@ def do(config, target, log, subprocesses, prefix='.'):
     log(" - run make")
     p = subprocess.Popen(f"BUILDROOT={prefix}/{buildroot} make 2>make.log", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL,
+        # stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)

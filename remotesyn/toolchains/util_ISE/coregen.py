@@ -10,7 +10,7 @@ def coregen(config, target, log, subprocesses, prefix='.') -> int:
     package = config.get(f'target.{target}', 'package', fallback='')
     speedgrade = config.get(f'target.{target}', 'speedgrade', fallback='')
     coregen_opts = config.get(f'target.{target}', 'coregen_opts', fallback='')
-    files_xco = config.get(f'target.{target}', 'files_xco', fallback='').split()
+    files_def = config.get(f'target.{target}', 'files_def', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
@@ -24,7 +24,7 @@ def coregen(config, target, log, subprocesses, prefix='.') -> int:
 
     res = 0
 
-    for fxco in files_xco:
+    for fxco in files_def:
         cname = fxco.split('/')[-1].split('.')[0]
         
         log(" - Generating", cname, "...")
@@ -40,6 +40,7 @@ def coregen(config, target, log, subprocesses, prefix='.') -> int:
             f.write(f'SET flowvendor = Other\n')
             f.write(f'SET verilogsim = true\n')
             f.write(f'SET vhdlsim = true\n')
+            f.write(f'SET implementationfiletype = ngc\n')
 
         log(" - run coregen")
         p = subprocess.Popen(f"coregen {coregen_opts} -p coregen_{cname}.cgp -b {prefix}/{fxco}", 
@@ -55,9 +56,22 @@ def coregen(config, target, log, subprocesses, prefix='.') -> int:
 
         if res==0:
             log(" - copy output files")
-            shutil.copy(f'{build_dir}/{cname}.vhd', f'{out_dir}/{cname}.vhd')
-            shutil.copy(f'{build_dir}/{cname}.v', f'{out_dir}/{cname}.v')
-            # shutil.copy(f'{build_dir}/{cname}.ngc', f'{out_dir}/{cname}.ngc')
+            try:
+                shutil.copy(f'{build_dir}/{cname}.vhd', f'{out_dir}/{cname}.vhd')
+            except FileNotFoundError:
+                pass
+            try:
+                shutil.copy(f'{build_dir}/{cname}.v', f'{out_dir}/{cname}.v')
+            except FileNotFoundError:
+                pass
+            try:
+                shutil.copy(f'{build_dir}/{cname}.ngc', f'{out_dir}/{cname}.ngc')
+            except FileNotFoundError:
+                pass
+            try:
+                shutil.copy(f'{build_dir}/{cname}.xco', f'{out_dir}/{cname}.xco')
+            except FileNotFoundError:
+                pass
         else:
             return res
 

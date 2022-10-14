@@ -20,7 +20,10 @@ def bitgen(config, target, log, subprocesses, prefix='.') -> int:
     log(" - run bitgen")
     p = subprocess.Popen(f"bitgen -intstyle xflow {bitgen_opts} -g Binary:Yes -w {out_dir}/{target}.ncd {target}.bit {out_dir}/{target}.pcf 2> bitgen.log", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL, 
+        # stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)

@@ -6,7 +6,10 @@ import subprocess
 def execp(cmd, subprocesses, cwd):
     p = subprocess.Popen(cmd, 
         shell=True, cwd=cwd, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        #stdout=subprocess.DEVNULL, 
+        #stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)
@@ -67,7 +70,8 @@ def do(config, target, log, subprocesses, prefix='.'):
     extra = ''
     if runtime!='all':
         extra = f'--stop-time={runtime.replace(" ", "")}'
-    res = execp(f"echo {toplevel} >> r.log && ghdl -r {ghdlr_opts} {extra} {toplevel} --vcd=out.vcd 2>&1 1>> r.log", subprocesses, build_dir)
+    # res = execp(f"echo {toplevel} >> r.log && ghdl -r {ghdlr_opts} {toplevel} {extra} --vcd=out.vcd --wave=out.ghw 2>&1 | tee r.log", subprocesses, build_dir)
+    res = execp(f"echo {toplevel} >> r.log && ./{toplevel} {ghdlr_opts} {extra} --vcd=out.vcd --wave=out.ghw 2>&1 | tee r.log", subprocesses, build_dir)
     log(" - copy logs")
     shutil.copy(f'{build_dir}/r.log', f'{out_dir}/r.log')
     # Ignore simulation errors: vhdl stopping with failure results in returned with 1
@@ -77,5 +81,6 @@ def do(config, target, log, subprocesses, prefix='.'):
 
     log(" - copy output files")
     shutil.copy(f'{build_dir}/out.vcd', f'{out_dir}/out.vcd')
+    shutil.copy(f'{build_dir}/out.ghw', f'{out_dir}/out.ghw')
 
     return 0

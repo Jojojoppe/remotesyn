@@ -11,7 +11,7 @@ import shutil
 def do(config, target, log, subprocesses, prefix='.'):
     shutil.rmtree(config.get('project', 'build_dir', fallback='build'), True)
 
-    justsynth = config.getboolean(f'target.{target}', 'justsynth', fallback=False)
+    stopafter = config.get(f'target.{target}', 'stopafter', fallback='')
 
     log("Syntesize:")
 
@@ -19,8 +19,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     if res != 0:
         log("ERROR: xst returned with", res)
         return res
-
-    if justsynth:
+    if stopafter=='synth':
         return res
 
     log("Implement")
@@ -38,6 +37,8 @@ def do(config, target, log, subprocesses, prefix='.'):
     res = par(config, target, log, subprocesses, prefix)
     if res != 0:
         log("ERROR: par returned with", res)
+        return res
+    if stopafter=='impl':
         return res
 
     log("Generate output files")

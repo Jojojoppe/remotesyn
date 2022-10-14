@@ -10,12 +10,13 @@ def do(config, target, log, subprocesses, prefix='.'):
     
     log(" - parsing options")
     toplevel = config.get(f'target.{target}', 'toplevel', fallback='toplevel')
-    vcdlevels = config.get(f'target.{target}', 'vcdlevels', fallback='1')
+    vcdlevels = config.get(f'target.{target}', 'vcdlevels', fallback='10')
     runtime = config.get(f'target.{target}', 'runtime', fallback='100 ns')
     fuse_opts = config.get(f'target.{target}', 'fuse_opts', fallback='')
     isim_opts = config.get(f'target.{target}', 'isim_opts', fallback='')
     files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
+    files_other = config.get(f'target.{target}', 'files_other', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
@@ -29,6 +30,12 @@ def do(config, target, log, subprocesses, prefix='.'):
     log(" - creating output directories")
     os.makedirs(build_dir, exist_ok=True)
     os.makedirs(out_dir, exist_ok=True)
+
+    log(" - copy needed files")
+    for f in files_other:
+        d = os.path.dirname(f)
+        os.makedirs(f"{build_dir}/{d}", exist_ok=True)
+        shutil.copy(f"{prefix}/{f}", f"{build_dir}/{f}")
 
     log(" - writing project file")
     with open(f'{build_dir}/sim.prj', 'w') as f:
@@ -51,7 +58,7 @@ def do(config, target, log, subprocesses, prefix='.'):
     res = p.returncode
 
     log(" - copy logs")
-    shutil.copy(f'{build_dir}/ffuse.log', f'{out_dir}/fuse.log')
+    shutil.copy(f'{build_dir}/fuse.log', f'{out_dir}/fuse.log')
 
     if res!=0:
         log("ERROR: fuse returned with:", res)
@@ -61,15 +68,18 @@ def do(config, target, log, subprocesses, prefix='.'):
     with open(f'{build_dir}/sim.tcl', 'w') as f:
         f.write("onerror {resume}\n")
         f.write("vcd dumpfile sim.vcd\n")
-        f.write(f"vcd dumpvars -m {toplevel} -l {vcdlevels}\n")
+        f.write(f"vcd dumpvars -m {toplevel.split()[0]} -l {vcdlevels}\n")
         f.write("vcd dumpon\n")
         f.write(f"run {runtime}\n")
         f.write("vcd dumpflush\nquit\n")
 
     log(" - run sim")
-    p = subprocess.Popen(f"./sim {isim_opts} -tclbatch sim.tcl > sim.log", 
+    p = subprocess.Popen(f"./sim {isim_opts} -tclbatch sim.tcl | tee sim.log", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL, 
+        # stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)

@@ -24,7 +24,10 @@ def map(config, target, log, subprocesses, prefix='.') -> int:
     log(" - run map")
     p = subprocess.Popen(f"map -intstyle xflow -p {devstring} -detail {map_opts} -ol high -xe n -w {out_dir}/{target}.ngd -o impl.map.ncd impl.pcf", 
         shell=True, cwd=build_dir, 
-        stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdin=subprocess.DEVNULL, 
+        # stdout=subprocess.DEVNULL, 
+        # stderr=subprocess.DEVNULL
+        )
     subprocesses.append(p)
     while p.poll() is None:
         time.sleep(1)
