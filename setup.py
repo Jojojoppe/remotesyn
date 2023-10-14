@@ -20,6 +20,6 @@ setup(
   ],
     packages=['remotesyn'],
     licence='BSD Licence',
-    install_requires=['paramiko'],
+    install_requires=['paramiko', 'html2text'],
     scripts=['scripts/rbuild', 'scripts/rmbuild', 'scripts/rmserver']
 )
