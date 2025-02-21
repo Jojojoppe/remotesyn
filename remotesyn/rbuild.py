@@ -73,12 +73,17 @@ def main():
             exit(1)
         
         try:
-            exec(f"from remotesyn.toolchains.{toolchain} import do")
+            print(f'Importing toolchain {toolchain}')
+            namespace = {}
+            exec(f"from remotesyn.toolchains.{toolchain} import do", globals(), namespace)
+            do_func = namespace.get('do')
+            if do_func is None:
+                raise ImportError("Failed to import 'do'")
         except ImportError:
             log(f"ERROR: Unknown toolchain '{toolchain}'")
             exit(1)
 
-        ret = do(config, target, log, subprocesses)
+        ret = do_func(config, target, log, subprocesses)
 
         if ret!=0:
             log("ERROR: toolchain returned with", ret)

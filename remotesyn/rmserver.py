@@ -15,6 +15,7 @@ import threading
 import socket
 import shutil
 import fcntl
+import traceback
 
 # List of running threads
 threads = []
@@ -209,6 +210,7 @@ class SSHServer(paramiko.ServerInterface):
             global running
             if running:
                 print("ERROR: Unknown error:", e)
+                traceback.print_exception(type(e), e, e.__traceback__)
             return False
 
 class Connection(threading.Thread):
@@ -258,6 +260,8 @@ def print_help():
     print("  -h                 Show this help message")
 
 def main():
+    global running
+
     # Parse arguments
     i = 1
     host = ''
