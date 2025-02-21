@@ -18,7 +18,7 @@ def print_help():
     log("  -h                 Show this help message")
     log("  -c <file>          Configuration file, defaults to project.cfg")
 
-if __name__=="__main__":
+def main():
     # Parse arguments
     i = 1
     nextarg = None
@@ -83,3 +83,7 @@ if __name__=="__main__":
         if ret!=0:
             log("ERROR: toolchain returned with", ret)
             exit(ret)
+
+
+if __name__=="__main__":
+    main()

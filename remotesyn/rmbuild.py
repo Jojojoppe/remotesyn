@@ -96,7 +96,7 @@ def print_help():
     print("  -h                 Show this help message")
     print("  -c <file>          Configuration file, defaults to project.cfg")
 
-if __name__=="__main__":
+def main():
     # Parse arguments
     i = 1
     nextarg = None
@@ -221,3 +221,7 @@ if __name__=="__main__":
         for p in subprocesses:
             p.kill()
         exit(0)
+
+
+if __name__=="__main__":
+    main()

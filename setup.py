@@ -21,5 +21,11 @@ setup(
     packages=['remotesyn'],
     licence='BSD Licence',
     install_requires=['paramiko', 'html2text'],
-    scripts=['scripts/rbuild', 'scripts/rmbuild', 'scripts/rmserver']
+    entry_points={
+        'console_scripts': [
+            'rmserver = remotesyn.rmserver:main',
+            'rmbuild = remotesyn.rmbuild:main',
+            'rbuild = remotesyn.rbuild:main'
+        ],
+    }, 
 )

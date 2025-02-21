@@ -257,7 +257,7 @@ def print_help():
     print("Options:")
     print("  -h                 Show this help message")
 
-if __name__=="__main__":
+def main():
     # Parse arguments
     i = 1
     host = ''
@@ -308,3 +308,7 @@ if __name__=="__main__":
     for t in threads:
         t.join()
         t.clean()
+
+
+if __name__=="__main__":
+    main()
