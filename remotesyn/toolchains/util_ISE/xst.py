@@ -14,6 +14,7 @@ def xst(config, target, log, subprocesses, prefix='.') -> int:
     netgensynth_type = config.get(f'target.{target}', 'netgensynth_type', fallback='-sim')
     files_vhdl = config.get(f'target.{target}', 'files_vhdl', fallback='').split()
     files_verilog = config.get(f'target.{target}', 'files_verilog', fallback='').split()
+    files_other = config.get(f'target.{target}', 'files_other', fallback='').split()
     build_dir = config.get(f'project', 'build_dir', fallback='build')
     out_dir = config.get(f'project', 'out_dir', fallback='out')
 
@@ -36,16 +37,23 @@ def xst(config, target, log, subprocesses, prefix='.') -> int:
             if s=='':
                 continue
             f.write(f"verilog work {prefix}/{s}\n")
+    for f in files_other:
+        if not f: continue
+        d = os.path.dirname(f)
+        if d:
+            os.makedirs(f"{build_dir}/{d}", exist_ok=True)
+        shutil.copy(f"{prefix}/{f}", f"{build_dir}/{f}")
 
     log(" - writing project generation file")
     with open(f'{build_dir}/prj.scr', 'w') as f:
         f.write(f'run\n-ifn syn.prj\n-ofn syn.ngc\n-ifmt mixed\n')
         f.write(f'-top {toplevel}\n')
         f.write(f'-p {devstring}\n-glob_opt max_delay -opt_mode speed\n')
-        f.write(f'-read_cores YES')
+        f.write(xst_opts)
+        f.write(f'\n-read_cores YES')
 
     log(" - run xst")
-    p = subprocess.Popen(f"xst -intstyle xflow {xst_opts} -ifn prj.scr", 
+    p = subprocess.Popen(f"xst -intstyle xflow -ifn prj.scr", 
         shell=True, cwd=build_dir, 
         stdin=subprocess.DEVNULL, 
         # stdout=subprocess.DEVNULL, 
